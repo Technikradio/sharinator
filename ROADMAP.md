@@ -2,9 +2,12 @@
 
 This document provides a feature roadmap.
 
-## Version 0.3
+## Version 0.4
  * API for Equipment management
  * Possibillity for cross instance sharing
+
+## Version 0.3
+ * Implement NGINX secure link for uploads and make it optional via the ´´´settings.py´´´ file
 
 ## Version 0.2
  * Extensive admin interface
