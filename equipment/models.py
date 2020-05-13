@@ -15,6 +15,7 @@ class Photograph(models.Model):
     title = models.CharField(max_length=100, blank=True)
     notes = models.TextField(blank=True, help_text="optional markdown notes on the image")
     uploaded_by = models.ForeignKey(User, null=False, on_delete=models.CASCADE)
+    uploaded_at = models.DateField(editable=False, default=datetime.date.today, help_text="Date of creation")
 
     def __str__(self):
         return "Image '{}' uploaded by {}".format(self.title, str(self.uploaded_by))
