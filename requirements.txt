@@ -11,3 +11,4 @@ pytz==2019.2
 sqlparse==0.3.0
 reportlab==3.5.23
 qrcode==6.1
+django-phonenumber-field>=4.0.0
