@@ -26,7 +26,7 @@ class Lending(models.Model):
         # I'm real sorry for the database server but I don't see a less complex solution.
         overlapping_filter = models.Q(start_of_lending__range=[self.start_of_lending, self.end_of_lending]) | \
                 models.Q(end_of_lending__range=[self.start_of_lending, self.end_of_lending])
-        if self.objects.filter(item_to_lend__id=self.item_to_lend.id).filter(overlapping_filter).exists():
+        if Lending.objects.filter(item_to_lend__id=self.item_to_lend.id).filter(overlapping_filter).exists():
             raise ValidationError("The requested item is already leanded in that time slot.")
 
         start_stamp: int = int(time.mktime(self.start_of_lending.timetuple()))
