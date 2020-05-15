@@ -40,12 +40,6 @@ class Photograph(models.Model):
             self.save()
             return
         else:
-            # Strip metadata off full res image
-            image_with_meta = Image.open(str(self.full_resolution_image.path))
-            data = list(image_with_meta.getdata())
-            image = Image.new(image_with_meta.mode, image_with_meta.size)
-            image.save(str(self.full_resolution_image.path), 'PNG')
-
             # Resize image
             image = Image.open(str(self.full_resolution_image.path))
             w, h = image.size
