@@ -7,6 +7,7 @@ from django.db import models
 import time
 
 from sharinator.equipment.models import Item
+from sharinator.equipment.helpers.markdown import compile_markdown
 
 # Create your models here.
 class Lending(models.Model):
@@ -16,6 +17,7 @@ class Lending(models.Model):
     start_of_lending = models.DateField(blank=False, null=False)
     end_of_lending = models.DateField(blank=False, null=False)
     notes = models.TextField(blank=True, help_text="Additional notes on the process (Markdown supported)")
+    notes_cache = models.TextField(blank=True, help_text="Cache of the md version of the notes field (please don't edit manually)")
 
     class Meta:
         ordering = ["start_of_lending"]
@@ -38,5 +40,6 @@ class Lending(models.Model):
         if end_stamp < start_stamp:
             raise ValidationError("The end of a lending may not be prior to its start.")
 
+        self.notes_cache = compile_markdown(self.notes)
         super().save(*args, **kwargs)
 

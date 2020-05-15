@@ -10,6 +10,7 @@ import magic
 
 from PIL import Image
 
+from sharinator.equipment.helpers.markdown import compile_markdown
 
 # Shamelessly inspired by the hagrid gallery
 class Photograph(models.Model):
@@ -19,6 +20,7 @@ class Photograph(models.Model):
             help_text="A full resolution copy of the image for close up looks")
     title = models.CharField(max_length=100, blank=True)
     notes = models.TextField(blank=True, help_text="optional markdown notes on the image")
+    notes_cache = models.TextField(blank=True, help_text="md cache of the notes field")
     uploaded_by = models.ForeignKey(User, null=False, on_delete=models.CASCADE)
     uploaded_at = models.DateField(editable=False, default=datetime.date.today, help_text="Date of creation")
 
@@ -29,6 +31,7 @@ class Photograph(models.Model):
         ordering = ["uploaded_at"]
 
     def save(self, *args, **kwargs):
+        self.notes_cache = compile_markdown(self.notes)
         super().save(*args, **kwargs)
         if not self.image:
             return
@@ -52,6 +55,7 @@ class Photograph(models.Model):
 class Item(models.Model):
     name = models.CharField(max_length=100, help_text="The name of the container")
     notes = models.TextField(blank=True, help_text="Thoughts on the container")
+    notes_cache = models.TextField(blank=True, help_text="md chache of the notes field")
     visible_to_others = models.BooleanField(default=True, help_text="If this is set to false "\
             "only the owner can see this container. Even if it is set to true only members of his "\
             "peer group can see this container")
@@ -66,5 +70,6 @@ class Item(models.Model):
         if self.parent_container != None:
             if not self.parent_container.is_container:
                 raise ValidationError("The selected parent isn't a container")
+        self.notes_cache = compile_markdown(self.notes)
         super().save(*args, **kwargs)
 

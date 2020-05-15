@@ -17,3 +17,4 @@ markdown-checklist>=0.4.1
 MarkdownSuperscript>=2.1.0
 MarkdownSubscript>=2.1.0
 python-magic>=0.4
+pyembed-markdown>=1.1.0
