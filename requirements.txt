@@ -12,4 +12,8 @@ sqlparse==0.3.0
 reportlab==3.5.23
 qrcode==6.1
 django-phonenumber-field>=4.0.0
-phonenumbers
+phonenumbers>=8.12
+markdown-checklist>=0.4.1
+MarkdownSuperscript>=2.1.0
+MarkdownSubscript>=2.1.0
+python-magic>=0.4

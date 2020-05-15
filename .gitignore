@@ -3,11 +3,20 @@ bin/
 include/
 lib/
 share/
+man/
+
+# Personal TODO file
+TODO.md
+
+# images folder created by unit tests
+images/
+django_extras/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
+*.pyc
 
 # C extensions
 *.so

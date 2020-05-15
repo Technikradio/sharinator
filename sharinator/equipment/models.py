@@ -1,8 +1,12 @@
 import datetime
+import os
 
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.db import models
+
+import magic
 
 from PIL import Image
 
@@ -25,28 +29,30 @@ class Photograph(models.Model):
         ordering = ["uploaded_at"]
 
     def save(self, *args, **kwargs):
-        if self.full_resolution_image == None:
-            self.full_resolution_image = self.image
         super().save(*args, **kwargs)
         if not self.image:
             return
+        if not self.full_resolution_image:
+            self.full_resolution_image = SimpleUploadedFile( \
+                    name=os.path.basename(self.image.path), \
+                    content=open(self.image.path, 'rb').read(), \
+                    content_type=magic.from_file(self.image.path, mime=True))
+            self.save()
+            return
+        else:
+            # Strip metadata off full res image
+            image_with_meta = Image.open(str(self.full_resolution_image.path))
+            data = list(image_with_meta.getdata())
+            image = Image.new(image_with_meta.mode, image_with_meta.size)
+            image.save(str(self.full_resolution_image.path), 'PNG')
 
-        # Strip metadata off full res image
-        image_with_meta = Image.open(str(self.full_resolution_image.path))
-        data = list(image_with_meta.getdata())
-        image = Image.new(image_with_meta.mode, image_with_meta.size)
-        image.save(str(self.full_resolution_image.path), 'PNG')
-
-        # Resize image
-        image_with_meta = Image.open(str(self.image.path))
-        data = list(image_with_meta.getdata())
-        image = Image.new(image_with_meta.mode, image_with_meta.size)
-        image.putdata(data)
-        w, h = image.size
-        while w * h > 2 * 10**6:
-            w, h = w // 2, h // 2
-        image = image.resize((w, h), Image.ANTIALIAS)
-        image.save(str(self.image.path), 'PNG')
+            # Resize image
+            image = Image.open(str(self.full_resolution_image.path))
+            w, h = image.size
+            while w * h > 2 * 10**6:
+                w, h = w // 2, h // 2
+            image = image.resize((w, h), Image.ANTIALIAS)
+            image.save(str(self.image.path), 'PNG', quality=80)
 
 
 class Item(models.Model):
