@@ -1,0 +1,47 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+  <title>{% block thetitle %}{% endblock %}</title>
+  <link href="{% static "/bootstrap/css/bootstrap.css" %}" rel="stylesheet">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!-- TODO: replace with static/style.css -->
+  <style>
+body {
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+}
+@media (min-width: 34em) {
+    .card-columns {
+        column-count: 1;
+    }
+}
+@media (min-width: 48em) {
+    .card-columns {
+        column-count: 2;
+    }
+}
+@media (min-width: 62em) {
+    .card-columns {
+        column-count: 3;
+    }
+}
+  </style>
+{% block head %}
+
+{% endblock %}
+</head>
+<body>
+	<!-- Include navbar here -->
+	<main role="main" class="container">
+		{% if messages %}
+		{% for message in messages %}
+  		<div class="{{ message.tags }}" role="alert">{{ message }}</div>
+		{% endfor %}
+  		{% endif %}
+	</main>
+	<script src="{% static "/jquery/jquery-3.5.1.slim.min.js" %}"></script>
+	<script src="{% static "/bootstrap/js/bootstrap.bundle.min.js" %}"></script>
+</body>
+</html>
