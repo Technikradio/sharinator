@@ -2,6 +2,7 @@ import datetime
 import os
 
 from django.contrib.auth.models import User
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.db import models
@@ -17,7 +18,7 @@ class Photograph(models.Model):
     image = models.ImageField(upload_to="images/%Y/%m/",
             help_text="The image to display everywhere (cropped)")
     full_resolution_image = models.ImageField(upload_to="images/fullres/%Y/%m/", null=True,
-            help_text="A full resolution copy of the image for close up looks")
+            blank=True, help_text="A full resolution copy of the image for close up looks")
     title = models.CharField(max_length=100, blank=True)
     notes = models.TextField(blank=True, help_text="optional markdown notes on the image")
     notes_cache = models.TextField(blank=True, help_text="md cache of the notes field")

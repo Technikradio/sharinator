@@ -34,12 +34,24 @@ body {
 </head>
 <body>
 	<!-- Include navbar here -->
+	<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+		<!-- TODO: design a propper icon and favicon -->
+		<a class="navbar-brand" href="/">SHARINATOR!</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbar"
+			aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+	</nav>
+
 	<main role="main" class="container">
 		{% if messages %}
 		{% for message in messages %}
   		<div class="{{ message.tags }}" role="alert">{{ message }}</div>
 		{% endfor %}
   		{% endif %}
+	{% block content %}
+	<h1>No content block defined inside template</h1>
+	{% endblock %}
 	</main>
 	<script src="{% static "/jquery/jquery-3.5.1.slim.min.js" %}"></script>
 	<script src="{% static "/bootstrap/js/bootstrap.bundle.min.js" %}"></script>

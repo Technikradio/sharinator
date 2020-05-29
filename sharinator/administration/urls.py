@@ -13,20 +13,9 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.conf import settings
 from django.contrib import admin
-from django.urls import include, path
-from django.conf.urls.static import static
-
-from sharinator.equipment import image_urls, equipment_urls
+from django.urls import path
 
 urlpatterns = [
-    path('admin/', include("sharinator.administration.urls")),
-    path('media/', include("sharinator.equipment.image_urls")),
-    path('equipment/', include("sharinator.equipment.equipment_urls")),
+    path('dbadmin/', admin.site.urls),
 ]
-
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-

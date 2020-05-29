@@ -1,3 +1,16 @@
 {% extends "base.html" %}
+{% block content %}
 
 <h3> Not yet implemented </h3>
+<a href="{{ image.full_resolution_image.url }}">
+<img src="{{ image.image.url }}" class="card-img-top" alt="{{ image.title }}" />
+</a>
+<div class="card-body">
+	<h5 class="card-title">
+		{{ image.title }}
+	</h5>
+	<p class="card-text mt-2">
+		{{ image.notes_cached }}
+	</p>
+</div>
+{% endblock %}
