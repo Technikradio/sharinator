@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load image_rendering %}
+{% block content %}
+<h3>Edit profile of user {{ profile.user.username }}</h3>
+
+<div class="card">
+	<div class="card-body">
+		{% if request.user.is_superuser or request.user.is_staff %}
+		<h5 class="card-title">Profile of user {{ profile.user.username }} [{{ profile.user.id }}]</h5>
+		{% else %}
+		<h5 class="card-title">Userprofile:></h5>
+		{% endif %}
+		<form method="post">
+			<div class="card-text">
+				{% csrf_token %}
+				<div class="row">
+					<div class="col-3">
+						<label>Edit profile picture: </label><br />
+						<a href="#">
+							{% render_icon profile.profile_picture 96 96 %}
+						</a>
+					</div>
+					<div class="col-6">
+						{{ form.user_name | as_crispy_field }}<br/>
+						<div class="row">
+						<div class="col-6">
+							{{ form.first_name | as_crispy_field }}
+						</div>
+						<div class="col-6">
+							{{ form.last_name | as_crispy_field }}
+						</div>
+						</div>
+						<div class="row">
+							<div class="col-6">
+								{{ form.user_email | as_crispy_field }}
+							</div>
+						</div>
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-3">
+						<h5>Contact details:</h5>
+					</div>
+					<div class="col-6">
+						<div class="row">
+							{{ form.landline_number | as_crispy_field }}
+						</div>
+						<div class="row">
+							{{ form.mobile_number | as_crispy_field }}
+						</div>
+						<div class="row">
+							{{ form.additional_number | as_crispy_field }}
+						</div>
+						<div class="row">
+							{{ form.phone_numbers_visible | as_crispy_field }}
+						</div>
+						<div class="row">
+							{{ form.pgp_key_id | as_crispy_field }}
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-6">
+						* Actually required.
+					</div>
+				</div>
+			</div>
+			<br />
+			<input class="btn btn-primary" type="submit" value="Save"/>
+		</form>
+	</div>
+</div>
+{% endblock %}

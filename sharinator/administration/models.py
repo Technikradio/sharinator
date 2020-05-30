@@ -1,13 +1,14 @@
 from django.contrib.auth.models import User
 from django.db import models
 
+from annoying.fields import AutoOneToOneField
 from phonenumber_field.modelfields import PhoneNumberField
 
 from sharinator.equipment.models import Photograph
 
 # Create your models here.
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = AutoOneToOneField(User, on_delete=models.CASCADE)
     landline_number = PhoneNumberField(blank=True)
     mobile_number = PhoneNumberField(blank=True)
     additional_number = PhoneNumberField(blank=True)

@@ -7,7 +7,7 @@ from sharinator.equipment.models import Photograph
 def render_as_large_image(p: Photograph, link=True, target_width=600, target_height=500):
     if p is None:
         return format_html('<img src="{}" alt="{}"/>', \
-                settings.STATIC_URL + "/icons/missing-picture.svg", 
+                settings.STATIC_URL + "icons/missing-picture.svg", 
                 "Missing image. Sorry.")
     img_url: str = p.image.url
     descr: str = p.title
@@ -26,10 +26,11 @@ def render_as_large_image(p: Photograph, link=True, target_width=600, target_hei
     else:
         return format_html('<img src="{}" alt="{}" {} />', img_url, descr, mark_safe(style_str))
 
-def render_as_icon(p: Photograph):
+def render_as_icon(p: Photograph, width=32, height=32):
     if p is None:
         return format_html('<img src="{}", alt="{}", style="width:32px;height:32px;" />',
-                settings.STATIC_URL + "/icons/missing-picture.svg", "Missing icon. Sorry.")
+                settings.STATIC_URL + "icons/missing-picture.svg", "Missing icon. Sorry.")
     img_url: str = p.image.url
     descr: str = p.title
-    return format_html('<img src="{}" alt="{}" style="width:32px;height:32px;" />', img_url, descr)
+    return format_html('<img src="{}" alt="{}" style="width:{}px;height:{}px;" />', img_url, descr, width, height)
+
