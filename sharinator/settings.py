@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'sharinator.equipment',
     'sharinator.peers',
     'sharinator.shares',
+    'crispy_forms',
 ]
 
 MIDDLEWARE = [
@@ -54,6 +55,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    #'sharinator.administration.middleware.ForceLogoutMiddleware',
 ]
 
 ROOT_URLCONF = 'sharinator.urls'
@@ -87,6 +89,7 @@ DATABASES = {
     }
 }
 
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -141,6 +144,8 @@ MEDIA_URL = "/media/"
 STATICFILES_DIRS = [
         os.path.join(BASE_DIR, "sharinator", "static"),
 ]
+
+LOGIN_URL = "/admin/dbadmin/login"
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 NOSE_ARGS = [
