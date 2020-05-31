@@ -28,6 +28,9 @@
   		<div class="{{ message.tags }}" role="alert">{{ message }}</div>
 		{% endfor %}
   		{% endif %}
+		{% block sidenavigation %}
+
+		{% endblock %}
 	{% block content %}
 	<h1>No content block defined inside template</h1>
 	{% endblock %}

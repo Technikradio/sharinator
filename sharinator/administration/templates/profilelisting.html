@@ -29,7 +29,7 @@
 				</div>
 				<div class="col-3">
 					<a href="{% url "profileedit" profile.id %}" class="btn-primary btn">Edit</a><br /><br />
-					<a href="{# {% url "forceuserlogout" profile.id %} #}#" class="btn btn-danger">Force logout</a>
+					<a href="{% url "forceforeignlogout" %}?user_id={{ profile.id }}" class="btn btn-danger">Force logout</a>
 				</div>
 			</div>
 		</div>

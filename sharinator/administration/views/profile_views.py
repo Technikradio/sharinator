@@ -2,6 +2,7 @@ from django import forms
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
+from django.contrib.sessions.models import Session
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render, get_object_or_404, redirect
@@ -105,7 +106,7 @@ class DeleteUserView(ConfirmingView, LoginRequiredMixin):
     message = "Are you sure you want to delete this profile?"
 
     def prepare(self, request: HttpRequest):
-        self.save_link = reverse("profileeditredirector")
+        self.safe_link = reverse("profileeditredirector")
 
     def perform_action(self, request: HttpRequest):
         if not request.GET.get("user_id"):
@@ -119,4 +120,24 @@ class DeleteUserView(ConfirmingView, LoginRequiredMixin):
         u.delete() # This should also delete the profile and all added stuff.
         messages.add_message(request, messages.SUCCESS, \
                 "Goodby {}. We'll miss you. Account successfully deleted.".format(username))
+
+class OOBUserLogoutView(ConfirmingView, LoginRequiredMixin):
+
+    message = "Are you sure you want to log this user out?"
+
+    def prepare(self, request: HttpRequest):
+        self.safe_link = reverse("profilelist")
+
+    def perform_action(self, request: HttpRequest):
+        if not (request.user.is_superuser or request.user.is_staff):
+            raise PermissionDenied("Dear {}, didn't your parents told you to not log other users out?" \
+                    .format(str(request.user.username)))
+        if not request.GET.get("user_id"):
+            messages.add_message(request, messages.ERROR, 'There was no user_id supplied.')
+            return
+        user_id: int = int(request.GET["user_id"])
+        u: User = get_object_or_404(User, id=user_id)
+        u.profile.force_logout()
+        messages.add_message(request, messages.SUCCESS,
+                "Successfully logged user '{}' out.".format(u.username))
 

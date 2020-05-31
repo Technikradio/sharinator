@@ -7,7 +7,7 @@ from django.shortcuts import render, redirect
 from django.views import View
 
 class ConfirmForm(forms.Form):
-    action_uuid = forms.UUIDField(initial=uuid4())
+    action_uuid = forms.UUIDField(initial=uuid4(), widget=forms.HiddenInput())
 
     class Meta:
         widgets = {'action_uuid': forms.HiddenInput()}
