@@ -1,3 +1,5 @@
+import logging
+
 from django import forms
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -14,6 +16,8 @@ from phonenumber_field.formfields import PhoneNumberField
 
 from sharinator.administration.models import Profile
 from sharinator.administration.views.confirm_view import ConfirmingView
+
+logger = logging.getLogger(__name__)
 
 # Create your views here.
 
@@ -140,4 +144,53 @@ class OOBUserLogoutView(ConfirmingView, LoginRequiredMixin):
         u.profile.force_logout()
         messages.add_message(request, messages.SUCCESS,
                 "Successfully logged user '{}' out.".format(u.username))
+
+class AddUserForm(forms.Form):
+
+    user_name = forms.CharField(label="User name: ")
+    user_email = forms.EmailField(label="Email address: ")
+    user_password = forms.CharField(label="Password: ", widget=forms.PasswordInput())
+    user_password_confirm = forms.CharField(label="Confirm Password: ", widget=forms.PasswordInput())
+
+class AddUserView(View, LoginRequiredMixin):
+
+    """
+    As for now one needs to be a user on the site to 'invite other users. This will change dough.'
+    """
+
+    template_name: str = "adduser.html"
+    goto_after: str = "profilelist"
+
+    def get(self, request: HttpRequest):
+        form = AddUserForm()
+        return render(request, self.template_name, {
+            'form': form,
+            })
+
+    def post(self, request: HttpRequest):
+        form = AddUserForm(request.POST)
+        if not form.is_valid():
+            messages.add_message(request, messages.ERROR, "Invalid form.")
+        user_name: str = form.cleaned_data["user_name"]
+        user_email: str = form.cleaned_data["user_email"]
+        user_password: str = form.cleaned_data["user_password"]
+        user_password_confirm: str = form.cleaned_data["user_password_confirm"]
+        if User.objects.filter(username=user_name).count() > 0:
+            messages.add_message(request, messages.ERROR, "A user '{}' already exists.".format(user_name))
+            return render(request, self.template_name, {
+                'form': form,
+                })
+        if user_password != user_password_confirm:
+            messages.add_message(request, messages.ERROR, "Passwords don't match")
+            return render(request, self.template_name, {
+                'form': form,
+                })
+        try:
+            User.objects.create_user(username=user_name, email=user_email, password=user_password)
+            logger.info("Added user: " + str(User.objects.get(username=user_name).profile))
+        except Exception as e:
+            messages.add_message(request, messages.ERROR, "Error on adding user: " + str(e))
+        messages.add_message(request, messages.SUCCESS, \
+                "Successfully added user {}. You may now edit its profile.".format(user_name))
+        return redirect(reverse(self.goto_after))
 

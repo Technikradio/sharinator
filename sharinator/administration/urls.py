@@ -25,4 +25,5 @@ urlpatterns = [
     path('profile/listprofiles', profile_views.ProfileListView.as_view(), name="profilelist"),
     path('profile/delete', profile_views.DeleteUserView.as_view(), name="deleteuser"),
     path('profile/forceforeignlogout', profile_views.OOBUserLogoutView.as_view(), name="forceforeignlogout"),
+    path('profile/add', profile_views.AddUserView.as_view(), name="adduser"),
 ]

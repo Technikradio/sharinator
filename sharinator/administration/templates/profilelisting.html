@@ -9,7 +9,9 @@
 </li>
 </ul>
 {% endif %}
-
+<a href="{% url "adduser" %}" class="btn btn-secondary">Add user</a>
+<br />
+<br />
 {% for profile in page_obj %}
 <div class="card">
 	<div class="card-body">
