@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="card">
+<div class="card-body">
+	<div class="card-title">
+		<h5>{{ title }}</h5>
+	</div>
+	<div class="card-text">
+		<p>
+		<br />{{ message }}<br />
+		</p>
+		<form method="post">
+			{% csrf_token %}
+			{{ form|crispy }}
+			<div class="row">
+				<div class="col-4">
+					<a href="{{ safe_link}}" class="btn btn-success">Take me back.</a>
+				</div>
+				<div class="col-4">
+					<button type="submit" class="btn btn-danger">Yes, I'm sure.</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+</div>
+{% endblock %}

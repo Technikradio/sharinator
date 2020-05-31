@@ -72,4 +72,18 @@
 		</form>
 	</div>
 </div>
+<br />
+<br />
+<div class="card">
+	<div class="card-body">
+	<div class="card-title">
+		<h5>Danger Zone</h5>
+	</div>
+	<div class="row">
+		<div class="col-4">
+			<a href="{% url "deleteuser" %}?user_id={{ profile.user.id }}" class="btn btn-danger">Delete Account</a>
+		</div>
+	</div>
+	</div>
+</div>
 {% endblock %}

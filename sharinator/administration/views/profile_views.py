@@ -12,6 +12,7 @@ from django.views.generic import ListView
 from phonenumber_field.formfields import PhoneNumberField
 
 from sharinator.administration.models import Profile
+from sharinator.administration.views.confirm_view import ConfirmingView
 
 # Create your views here.
 
@@ -98,4 +99,24 @@ class ProfileListView(LoginRequiredMixin, ListView):
         #    page = int(request.GET["page"])
         # return render(request, self.template_name, {})
         return super().get(request)
+
+class DeleteUserView(ConfirmingView, LoginRequiredMixin):
+
+    message = "Are you sure you want to delete this profile?"
+
+    def prepare(self, request: HttpRequest):
+        self.save_link = reverse("profileeditredirector")
+
+    def perform_action(self, request: HttpRequest):
+        if not request.GET.get("user_id"):
+            messages.add_message(request, messages.ERROR, 'There was no user_id supplied.')
+            return
+        user_id: int = int(request.GET["user_id"])
+        u: User = get_object_or_404(User, id=user_id)
+        if not (request.user.is_superuser or u == request.user):
+            raise PermissionDenied("You can't simply delete other users. That's not nice.")
+        username: str = str(u.username)
+        u.delete() # This should also delete the profile and all added stuff.
+        messages.add_message(request, messages.SUCCESS, \
+                "Goodby {}. We'll miss you. Account successfully deleted.".format(username))
 
