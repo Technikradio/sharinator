@@ -28,8 +28,8 @@ def render_as_large_image(p: Photograph, link=True, target_width=600, target_hei
 
 def render_as_icon(p: Photograph, width=32, height=32):
     if p is None:
-        return format_html('<img src="{}", alt="{}", style="width:32px;height:32px;" />',
-                settings.STATIC_URL + "icons/missing-picture.svg", "Missing icon. Sorry.")
+        return format_html('<img src="{}", alt="{}", style="width:{}px;height:{}px;" />',
+                settings.STATIC_URL + "icons/missing-picture.svg", "Missing icon. Sorry.", width, height)
     img_url: str = p.image.url
     descr: str = p.title
     return format_html('<img src="{}" alt="{}" style="width:{}px;height:{}px;" />', img_url, descr, width, height)

@@ -22,4 +22,5 @@ urlpatterns = [
     path('dbadmin/', admin.site.urls),
     path('profile/<int:profile_id>/edit', profile_views.ProfileEditingView.as_view(), name="profileedit"),
     path('profile/edit', profile_views.ProfileRedirectHelperView.as_view(), name="profileeditredirector"),
+    path('profile/listprofiles', profile_views.ProfileListView.as_view(), name="profilelist"),
 ]

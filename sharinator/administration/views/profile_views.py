@@ -7,6 +7,7 @@ from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from django.views import View
+from django.views.generic import ListView
 
 from phonenumber_field.formfields import PhoneNumberField
 
@@ -82,4 +83,19 @@ class ProfileRedirectHelperView(LoginRequiredMixin, View):
     def get(self, request: HttpRequest):
         pid: int = request.user.profile.id
         return redirect(reverse("profileedit", args=[pid]))
+
+class ProfileListView(LoginRequiredMixin, ListView):
+
+    template_name = "profilelisting.html"
+    paginate_by = 25
+    model = Profile
+
+    def get(self, request: HttpRequest):
+        if not (request.user.is_superuser or request.user.is_staff):
+            raise PermissionDenied("Sorry {}, I can't let you do that.".format(str(request.user)))
+        #page: int = 1
+        #if request.GET.get("page"):
+        #    page = int(request.GET["page"])
+        # return render(request, self.template_name, {})
+        return super().get(request)
 

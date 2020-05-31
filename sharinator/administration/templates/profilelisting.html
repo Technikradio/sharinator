@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% load image_rendering %}
+{% block content %}
+<h5>Users:</h5><br />
+{% if not page_obj %}
+<ul class="list-group">
+<li class="list-group-item">
+	<h6>There are no entries</h6>
+</li>
+</ul>
+{% endif %}
+
+{% for profile in page_obj %}
+<div class="card">
+	<div class="card-body">
+		<div class="card-title">
+			<h6>User: {{ profile.user.username }}</h6>
+		</div>
+		<div class="card-text">
+			<div class="row">
+				<div class="col-3">
+					{% render_icon profile.profile_picture height=96 width=96 %}
+				</div>
+				<div class="col-6">
+					Full name: {{ profile.user.first_name }} {{ profile.user.last_name }}<br />
+					Last login: {{ profile.user.last_login }} <br />
+					Email: {{ profile.user.email }} <br />
+					Staff: {{ profile.user.is_staff }} Superuser: {{ profile.user.is_superuser}}<br />
+				</div>
+				<div class="col-3">
+					<a href="{% url "profileedit" profile.id %}" class="btn-primary btn">Edit</a><br /><br />
+					<a href="{# {% url "forceuserlogout" profile.id %} #}#" class="btn btn-danger">Force logout</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endfor %}
+<br />
+<div class="card">
+	<div class="card-body">
+	<span class="col-3">
+		{% if page_obj.has_previous %}
+			<a href="?page=1" class="btn-secondary">&laquo;first</a>
+			<a href="?page={{ page_obj.previous_page_number }}" class="btn-secondary">Back</a>
+		{% endif %}
+	</span>
+	<center>
+	<span class="col-4">
+		Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+	</span>
+	</center>
+	<span class="col-3">
+		{% if page_obj.has_next %}
+		<a href="?page={{ page_obj.next_page_number }}" class="btn-secondary">Next</a>
+		<a href="?page={{ page_obj.paginator.num_pages }}" class="btn-econdary">last&raquo;</a>
+		{% endif %}
+	</span>
+	</div>
+</div>
+{% endblock %}

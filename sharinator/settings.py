@@ -144,6 +144,8 @@ STATICFILES_DIRS = [
         os.path.join(BASE_DIR, "sharinator", "static"),
 ]
 
+LOGIN_URL = "/admin/dbadmin/login"
+
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 NOSE_ARGS = [
     '--with-coverage',
