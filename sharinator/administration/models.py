@@ -30,7 +30,7 @@ class Profile(models.Model):
 
 def update_session_last_login(sender, **kwargs):
     if "request" in kwargs:
-        kwargs["request"].session['LAST_LOGIN_DATE'] = datetime.now()
+        kwargs["request"].session['LAST_LOGIN_DATE'] = str(datetime.now())
 
 user_logged_in.connect(update_session_last_login)
 

@@ -2,6 +2,7 @@ import logging
 
 from django import forms
 from django.contrib import messages
+from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.contrib.sessions.models import Session
@@ -193,4 +194,51 @@ class AddUserView(View, LoginRequiredMixin):
         messages.add_message(request, messages.SUCCESS, \
                 "Successfully added user {}. You may now edit its profile.".format(user_name))
         return redirect(reverse(self.goto_after))
+
+class ChangePasswordForm(forms.Form):
+
+    user_password_current = forms.CharField(label="Current password: ", widget=forms.PasswordInput())
+    user_password = forms.CharField(label="Password: ", widget=forms.PasswordInput())
+    user_password_confirm = forms.CharField(label="Confirm password: ", widget=forms.PasswordInput())
+
+class ChangePasswordView(View, LoginRequiredMixin):
+
+    template_name = "changepassword.html"
+
+    def get(self, request: HttpRequest):
+        form = ChangePasswordForm()
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request: HttpRequest):
+        form = ChangePasswordForm(request.POST)
+        if not form.is_valid():
+            messages.add_message(request, messages.ERROR, "Invalid form data.")
+            return render(request, self.template_name, {'form': form})
+        user_password_current: str = form.cleaned_data["user_password_current"]
+        user_password: str = form.cleaned_data["user_password"]
+        user_password_confirm: str = form.cleaned_data["user_password_confirm"]
+        u: User = request.user
+        if request.GET.get("user_id"):
+            uid: int = int(request.GET["user_id"])
+            if uid != u.id and not (u.is_superuser or u.is_staff):
+                messages.add_message(request, messages.ERROR,
+                        "Unable to change different users passwords.")
+                return render(request, self.template_name, {'form': form})
+            else:
+                u = get_object_or_404(User, id=uid)
+        if not u.check_password(user_password_current):
+            messages.add_message(request, messages.ERROR, "Wrong current password.")
+            return render(request, self.template_name, {'form': form})
+        if not user_password == user_password_confirm:
+            messages.add_message(request, messages.ERROR, "New passwords don't match.")
+            return render(request, self.template_name, {'form': form})
+        if user_password == user_password_current:
+            messages.add_message(request, messages.ERROR, "The new password shouldn't match the old one.")
+            return render(request, self.template_name, {'form': form})
+        u.set_password(user_password)
+        u.save()
+        update_session_auth_hash(request, request.user)
+        messages.add_message(request, messages.SUCCESS, \
+                "Successfully changed password of user '{}'".format(u.username))
+        return redirect(reverse("profileeditredirector"))
 

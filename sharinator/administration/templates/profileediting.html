@@ -19,7 +19,8 @@
 						<label>Edit profile picture: </label><br />
 						<a href="#">
 							{% render_icon profile.profile_picture height=96 width=96 %}
-						</a>
+						</a><br />
+						<a href="{% url "changepassword" %}" class="btn btn-primary">Change Password</a>
 					</div>
 					<div class="col-6">
 						{{ form.user_name | as_crispy_field }}<br/>

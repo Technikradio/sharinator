@@ -26,4 +26,5 @@ urlpatterns = [
     path('profile/delete', profile_views.DeleteUserView.as_view(), name="deleteuser"),
     path('profile/forceforeignlogout', profile_views.OOBUserLogoutView.as_view(), name="forceforeignlogout"),
     path('profile/add', profile_views.AddUserView.as_view(), name="adduser"),
+    path('profile/changepassword', profile_views.ChangePasswordView.as_view(), name="changepassword"),
 ]
