@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+{% if not request.user.is_superuser and not request.user.is_staff %}
+You're not allowed here
+{% else %}
+<a href="{% url 'profilelist' %}" class="btn btn-secondary">
+	List Users <span class="badge badge-light">{{ number_of_users }}</span>
+</a><br /><br />
+<a href="{% url 'listmedia' %}?global=True" class="btn btn-secondary">List media</a>
+{% endif %}
+{% endblock %}

@@ -16,10 +16,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from sharinator.administration.views import profile_views, image_views
+from sharinator.administration.views import profile_views, image_views, management_views
 
 urlpatterns = [
     path('dbadmin/', admin.site.urls),
+    path('dashboard', management_views.ManagementDashboardView.as_view(), name="managementdashboard"),
     path('profile/<int:profile_id>/edit', profile_views.ProfileEditingView.as_view(), name="profileedit"),
     path('profile/edit', profile_views.ProfileRedirectHelperView.as_view(), name="profileeditredirector"),
     path('profile/listprofiles', profile_views.ProfileListView.as_view(), name="profilelist"),
