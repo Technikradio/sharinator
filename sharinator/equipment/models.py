@@ -6,6 +6,8 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.db import models
+from django.db.models.signals import post_delete
+from django.dispatch import receiver
 
 import magic
 
@@ -52,6 +54,13 @@ class Photograph(models.Model):
             image = image.resize((w, h), Image.ANTIALIAS)
             image.save(str(self.image.path), 'PNG', quality=80)
 
+@receiver(post_delete, sender=Photograph)
+def photograph_post_delete_handler(sender, **kwargs):
+    p = kwargs['instance']
+    storage, path = p.full_resolution_image.storage, p.full_resolution_image.path
+    storage.delete(path)
+    storage, path = p.image.storage, p.image.path
+    storage.delete(path)
 
 class Item(models.Model):
     name = models.CharField(max_length=100, help_text="The name of the container")

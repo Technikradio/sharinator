@@ -1,3 +1,5 @@
+import os.path
+
 from django.contrib.auth.models import User
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
@@ -36,4 +38,10 @@ class UploadImageTestCase(TestCase):
         self.assertTrue(p.full_resolution_image.height == 3971)
         self.assertTrue(p.image.width < 5957)
         self.assertTrue(p.image.height < 3971)
+        self.assertTrue(os.path.isfile(p.image.path))
+        self.assertTrue(os.path.isfile(p.full_resolution_image.path))
+        p.delete()
+        self.assertFalse(os.path.isfile(str(p.image.path)))
+        self.assertFalse(os.path.isfile(str(p.full_resolution_image.path)))
         pass
+
