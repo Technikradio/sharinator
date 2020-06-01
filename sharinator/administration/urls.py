@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from sharinator.administration.views import profile_views
+from sharinator.administration.views import profile_views, image_views
 
 urlpatterns = [
     path('dbadmin/', admin.site.urls),
@@ -27,4 +27,5 @@ urlpatterns = [
     path('profile/forceforeignlogout', profile_views.OOBUserLogoutView.as_view(), name="forceforeignlogout"),
     path('profile/add', profile_views.AddUserView.as_view(), name="adduser"),
     path('profile/changepassword', profile_views.ChangePasswordView.as_view(), name="changepassword"),
+    path('media/list', image_views.ListMediaView.as_view(), name="listmedia"),
 ]

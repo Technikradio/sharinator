@@ -4,11 +4,14 @@ from django.utils.html import format_html, escape, mark_safe
 
 from sharinator.equipment.models import Photograph
 
-def render_as_large_image(p: Photograph, link=True, target_width=600, target_height=500):
+def render_as_large_image(p: Photograph, link=True, target_width=600, target_height=500, custom_style=None):
     if p is None:
-        return format_html('<img src="{}" alt="{}"/>', \
+        style: str = ""
+        if custom_style is not None:
+            style = mark_safe(escape(str(custom_style)).replace("&quot;", "\""))
+        return format_html('<img src="{}" alt="{}" {}/>', \
                 settings.STATIC_URL + "icons/missing-picture.svg", 
-                "Missing image. Sorry.")
+                "Missing image. Sorry.", style)
     img_url: str = p.image.url
     descr: str = p.title
     style_str: str = ""
@@ -19,6 +22,8 @@ def render_as_large_image(p: Photograph, link=True, target_width=600, target_hei
             w /= 2
             h /= 2
         style_str = 'style="width:{}px;height:{}px;"'.format(escape(w), escape(h))
+    if custom_style is not None:
+        style_str = mark_safe(escape(str(custom_style)).replace("&quot;", "\""))
     if link:
         detail_page_url: str = reverse("image_detail_page", args=[p.id])
         return format_html('<a href="{}"><img src="{}" alt="{}" {} /></a>', \

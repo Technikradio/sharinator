@@ -17,9 +17,12 @@ def render_image(p: Photograph, *args, **kwargs):
         width = int(kwargs["width"])
     if "height" in kwargs:
         height = int(kwargs["height"])
-    a = image.render_as_large_image(p, link, width, height)
+    custom_style: str = None
+    if "style" in kwargs:
+        custom_style = str(kwargs["style"])
+    a = image.render_as_large_image(p, link, width, height, custom_style=custom_style)
     for pp in args:
-        a += image.render_as_large_image(pp, link, width, height)
+        a += image.render_as_large_image(pp, link, width, height, custom_style=custom_style)
     return mark_safe(a)
 
 @register.simple_tag
