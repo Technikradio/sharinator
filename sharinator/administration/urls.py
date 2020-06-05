@@ -29,4 +29,5 @@ urlpatterns = [
     path('profile/add', profile_views.AddUserView.as_view(), name="adduser"),
     path('profile/changepassword', profile_views.ChangePasswordView.as_view(), name="changepassword"),
     path('media/list', image_views.ListMediaView.as_view(), name="listmedia"),
+    path('media/<int:image_id>/edit', image_views.EditMediaView.as_view(), name="editmedia"),
 ]

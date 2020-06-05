@@ -26,7 +26,7 @@
 			{{ photograph.notes_cache }}
 			{% endautoescape %}
 		</div>
-		<a href="#{# TODO: implement #}" class="card-link btn btn-secondary">Edit Image</a>
+		<a href="{% url "editmedia" photograph.id %}" class="card-link btn btn-secondary">Edit Image</a>
 	</div>
 	<div class="card-footer">
 		Uploaded at: {{ photograph.uploaded_at }}
