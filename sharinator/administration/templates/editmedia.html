@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load image_rendering %}
+{% load static %}
+{% block content %}
+<h3>Edit image</h3>
+<div class="card">
+	{% render_image photograph style='class="card-img-top"' %}
+	<div class="card-body">
+		<h5 class="card-title">Edit image: {{ photograph.title }}</h5>
+		<form method="post">
+			<div class="card-text">
+				{% csrf_token %}
+				{{ form | crispy }}
+			</div>
+			<br />
+			<input class="btn btn-primary" type="submit" value="Save"/>
+		</form>
+	<br />
+	<h5>Danger zone:</h5>
+	Delete image: 
+	<a href="{% url "deleteimage" %}?image_id={{ photograph.id }}" class="btn btn-danger" style="width: 4em;">
+		<img src="{% static "/icons/delete.svg" %}" style="width: 32px;"/>
+	</a>
+	</div>
+	<div class="card-footer">
+		Uploaded at: {{ photograph.uploaded_at }}
+		{% if request.user.is_superuser or request.user.is_satff %}
+		, Uploaded by: {{ photograph.uploaded_by }}
+		{% endif %}
+	</div>
+</div>
+{% endblock %}

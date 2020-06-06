@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<h3>Upload image</h3>
+<div class="card">
+	<div class="card-body">
+		<div class="card-title">
+			<div class="btn-group" style="width: 100%" >
+				{% if single %}
+				<a href="#" class="btn btn-primary">Upload single image</a>
+				<a href="{% url "uploadmultipleimages" %}" class="btn btn-outline-secondary">
+					Upload multiple images
+				</a>
+				{% else %}
+				<a href="{% url "uploadsingleimage" %}" class="btn btn-outline-secondary">Upload single image</a>
+				<a href="#" class="btn btn-primary">Upload multiple images</a>
+				{% endif %}
+			</div>
+		</div>
+		<form method="post" enctype="multipart/form-data">
+			<div class="card-text">
+				{% csrf_token %}
+				{{ form | crispy }}
+				{% if not single %}
+				<h6 class="text-muted">Hint:</h6>
+				<p class="text-muted">
+				{% verbatim %}
+				You can use the formatting tags <code>{count}</code> to retrive the current image index
+				and <code>{user}</code> to get the current user name.
+				{% endverbatim %}
+				</p>
+				{% endif %}
+			</div>
+			<br />
+			<input class="btn btn-primary" type="submit" value="Upload!"/>
+		</form>
+	</div>
+</div>
+{% endblock %}
