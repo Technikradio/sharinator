@@ -11,6 +11,7 @@ from django.urls import reverse
 from django.views import View
 from django.views.generic import ListView
 
+from sharinator.administration.views.confirm_view import ConfirmingView
 from sharinator.equipment.models import Photograph
 
 class ListMediaView(ListView, LoginRequiredMixin):
@@ -181,4 +182,23 @@ class SelectImageView(View, ABC):
     @abstractmethod
     def process_selection(self, request: HttpRequest, image: Photograph, payload: str):
         pass
+
+
+class DeleteImageView(LoginRequiredMixin, ConfirmingView):
+    
+    message = "Are you sure you want to delete this image?"
+
+    def prepare(self, request: HttpRequest):
+        self.safe_link = reverse("listmedia")
+        self.redirect_to = reverse("listmedia")
+
+    def perform_action(self, request: HttpRequest):
+        if not request.GET.get("image_id"):
+            messages.add_message(request, messages.ERROR, 'There was no image_id supplied.')
+            return
+        p: Photograph = get_object_or_404(Photograph, id=int(request.GET["image_id"]))
+        if not (p.uploaded_by == request.user or request.user.is_superuser or request.user.is_staff):
+            raise PermissionDenied("Maybe the other users don't want their pictures deleted?")
+        p.delete()
+        messages.add_message(request, messages.SUCCESS, "Successfully deleted image #{}.".format(request.GET["image_id"]))
 

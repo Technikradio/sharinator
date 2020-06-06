@@ -33,4 +33,5 @@ urlpatterns = [
     path('media/<int:image_id>/edit', image_views.EditMediaView.as_view(), name="editmedia"),
     path('media/upload', image_views.SingleMediaUploadView.as_view(), name="uploadsingleimage"),
     path('media/uploadmutliple', image_views.MassMediaUploadView.as_view(), name="uploadmultipleimages"),
+    path('media/delete', image_views.DeleteImageView.as_view(), name="deleteimage"),
 ]

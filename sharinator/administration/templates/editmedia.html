@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
 {% load image_rendering %}
+{% load static %}
 {% block content %}
 <h3>Edit image</h3>
 <div class="card">
@@ -15,6 +16,12 @@
 			<br />
 			<input class="btn btn-primary" type="submit" value="Save"/>
 		</form>
+	<br />
+	<h5>Danger zone:</h5>
+	Delete image: 
+	<a href="{% url "deleteimage" %}?image_id={{ photograph.id }}" class="btn btn-danger" style="width: 4em;">
+		<img src="{% static "/icons/delete.svg" %}" style="width: 32px;"/>
+	</a>
 	</div>
 	<div class="card-footer">
 		Uploaded at: {{ photograph.uploaded_at }}
