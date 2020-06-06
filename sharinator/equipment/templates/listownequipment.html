@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% load static %}
+{% load image_rendering %}
+{% block content %}
+<h5>Equipment gallery:</h5><br />
+{% if not page_obj %}
+<ul class="list-group">
+<li class="list-group-item">
+	<h6>There are no items. <a href="#{# TODO: implement #}" class="btn btn-outline-secondary">Create one</a>?</h6>
+</li>
+</ul>
+{% else %}
+<a href="#{# TODO: implement #}" class="btn btn-secondary">Add{# TODO: add plus symbol #}</a>
+<br />
+<br />
+<ul class="list-group">
+{% for item in page_obj %}
+<li class="list-group-item">
+	<div class="media">
+		<div class="mr-3">
+			{% render_icon item.images.0 width=64 height=64 %}
+		</div>
+		<div class="media-body">
+			<div class="mt-0 mb-1">
+				<h5>{{ item.name }}</h5>
+			</div>
+			<p>
+			things like the current lending status should be displayed here.
+			</p>
+			<p class="text-muted">
+				Uploaded at: {{ item.created_at }}
+				{% if request.user.is_superuser or request.user.is_staff %}
+				, Owner: {{ item.owner }}
+				{% endif %}
+			</p>
+		</div>
+	</div>
+</li>
+<br />
+{% endfor %}
+</ul>
+<br />
+<div class="card">
+	<div class="card-body">
+	<span class="col-3">
+		{% if page_obj.has_previous %}
+			<a href="?page=1" class="btn-secondary">&laquo;first</a>
+			<a href="?page={{ page_obj.previous_page_number }}" class="btn-secondary">Back</a>
+		{% endif %}
+	</span>
+	<center>
+	<span class="col-4">
+		Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+	</span>
+	</center>
+	<span class="col-3">
+		{% if page_obj.has_next %}
+		<a href="?page={{ page_obj.next_page_number }}" class="btn-secondary">Next</a>
+		<a href="?page={{ page_obj.paginator.num_pages }}" class="btn-econdary">last&raquo;</a>
+		{% endif %}
+	</span>
+	</div>
+</div>
+{% endif %}
+{% endblock %}

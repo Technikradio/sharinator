@@ -17,5 +17,5 @@ from django.urls import path
 from sharinator.equipment.equipment_views import *
 
 urlpatterns = [
-    #path('display/<int:image_id>', DisplayImageView.as_view(), name="image_detail_page"),
+    path('list', ListOwnEquipmentView.as_view(), name="list_equipment"),
 ]
