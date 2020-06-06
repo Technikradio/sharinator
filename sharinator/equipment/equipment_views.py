@@ -9,6 +9,7 @@ from django.views.generic import ListView
 from django.views.generic.edit import FormView
 
 from sharinator.administration.views.image_views import SelectImageView
+from sharinator.administration.views.confirm_view import ConfirmingView
 from sharinator.equipment.models import Item, Photograph
 
 # Create your views here.
@@ -51,6 +52,7 @@ class AddEquipmentView(FormView, LoginRequiredMixin):
                 is_container=form.cleaned_data["is_container"],
                 can_be_lend_alone=form.cleaned_data["can_be_lend_alone"])
         self.success_url = reverse("edit_equipment", args=[i.id])
+        messages.add_message(request, messages.SUCCESS, "Successfully added item.")
         return super().form_valid(form)
 
 class EditEquipmentView(FormView, LoginRequiredMixin):
@@ -125,4 +127,31 @@ class AddImageToItemView(SelectImageView, LoginRequiredMixin):
             raise PermissionDenied("You're not allowed to add images to this item.")
         i.images.add(image)
         i.save()
+        messages.add_message(request, messages.SUCCESS, \
+                "Successfully added image '{}' to item.".format(str(image.title)))
+
+class DeleteUserView(ConfirmingView, LoginRequiredMixin):
+
+    message = "Are you sure you want to delete this item?"
+
+    item_id: int = -1
+
+    def get(self, request: HttpRequest, item_id: int):
+        self.item_id = item_id
+        return super().get(request)
+
+    def post(self, request: HttpRequest, item_id: int):
+        self.item_id = item_id
+        return super().post(request)
+
+    def prepare(self, request: HttpRequest):
+        self.redirect_to = reverse("list_equipment")
+        self.safe_link = reverse("edit_equipment", args=[self.item_id])
+
+    def perform_action(self, request: HttpRequest):
+        i: Item = get_object_or_404(Item, id=self.item_id)
+        if not (i.owner == request.user or request.user.is_superuser):
+            raise PermissionDenied("You're not allowed to delete other users property.")
+        i.delete()
+        messages.add_message(request, messages.SUCCESS, "Successfully deleted item '{}'".format(i.name))
 

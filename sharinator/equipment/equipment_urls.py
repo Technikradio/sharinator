@@ -21,4 +21,5 @@ urlpatterns = [
     path('add', AddEquipmentView.as_view(), name="add_equipment"),
     path('<int:item_id>/edit', EditEquipmentView.as_view(), name="edit_equipment"),
     path('<int:item_id>/addimage', AddImageToItemView.as_view(), name="add_image_to_item"),
+    path('<int:item_id>/delete', DeleteUserView.as_view(), name="delete_equipment"),
 ]

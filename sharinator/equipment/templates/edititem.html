@@ -23,10 +23,14 @@
 	<div class="card-body">
 		<h5 class="card-title">Images</h5>
 		<div class="card-text">
+			<div class="card-deck">
 			{% for p in item.images.all %}
 			{# TODO: make fancy #}
-			{% render_icon p style="width: 96px; height: 96px;" %}
+			<div class="card" style="width: 96px;">
+			{% render_image p style='class="card-img-top" style="width: 96px;"' %}
+			</div>
 			{% endfor %}
+			</div>
 		</div>
 		<br />
 		<a href="{% url 'add_image_to_item' item.id %}" class="btn btn-primary">
@@ -43,6 +47,17 @@
 		<div class="card-text">
 			Not yet implemented
 		</div>
+	</div>
+</div>
+<br />
+<br />
+<div class="card">
+	<div class="card-body">
+		<h5 class="card-title text-danger">Danger Zone:</h5>
+		<a href="{% url 'delete_equipment' item.id %}" class="btn btn-danger">
+			<img src="{% static '/icons/delete.svg' %}" style="width: 32px; height: 32px;" />
+			Delete item
+		</a>
 	</div>
 </div>
 <br />
