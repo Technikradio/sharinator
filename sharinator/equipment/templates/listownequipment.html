@@ -6,11 +6,13 @@
 {% if not page_obj %}
 <ul class="list-group">
 <li class="list-group-item">
-	<h6>There are no items. <a href="#{# TODO: implement #}" class="btn btn-outline-secondary">Create one</a>?</h6>
+	<h6>There are no items. <a href="{% url 'add_equipment' %}" class="btn btn-outline-secondary">Create one</a>?</h6>
 </li>
 </ul>
 {% else %}
-<a href="#{# TODO: implement #}" class="btn btn-secondary">Add{# TODO: add plus symbol #}</a>
+<a href="{% url 'add_equipment' %}" class="btn btn-secondary">
+	<img src="{% static '/icons/plus-box.svg' %}" style="width: 32px; height: 32px;" />Add
+</a>
 <br />
 <br />
 <ul class="list-group">
@@ -28,6 +30,10 @@
 			things like the current lending status should be displayed here.
 			</p>
 			<p class="text-muted">
+				<a href="{% url 'edit_equipment' item.id %}" class="btn btn-primary">
+					<img src="{% static 'icons/edit-outline.svg' %}" style="width: 32px; height: 32px;"/>
+					Edit
+				</a>
 				Uploaded at: {{ item.created_at }}
 				{% if request.user.is_superuser or request.user.is_staff %}
 				, Owner: {{ item.owner }}

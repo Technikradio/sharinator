@@ -18,4 +18,7 @@ from sharinator.equipment.equipment_views import *
 
 urlpatterns = [
     path('list', ListOwnEquipmentView.as_view(), name="list_equipment"),
+    path('add', AddEquipmentView.as_view(), name="add_equipment"),
+    path('<int:item_id>/edit', EditEquipmentView.as_view(), name="edit_equipment"),
+    path('<int:item_id>/addimage', AddImageToItemView.as_view(), name="add_image_to_item"),
 ]
