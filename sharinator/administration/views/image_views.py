@@ -65,7 +65,7 @@ class SingleMediaUploadForm(forms.Form):
     image_notes = forms.CharField(required=False, widget=forms.Textarea)
 
 class MassMediaUploadForm(forms.Form):
-    image_files = forms.ImageField()
+    image_files = forms.ImageField(widget=forms.ClearableFileInput(attrs={'multiple': True}))
     title_template = forms.CharField(max_length=100, required=False)
     notes_template = forms.CharField(required=False, widget=forms.Textarea)
 
@@ -111,6 +111,9 @@ class MassMediaUploadView(View, LoginRequiredMixin):
             'single': False,
             })
 
+    def format_text(self, text: str, request: HttpRequest, file_count: int):
+        return text.format(user=request.user.username, count=file_count)
+
     def post(self, request: HttpRequest):
         f: MassMediaUploadForm = MassMediaUploadForm(request.POST, request.FILES)
         redirect_to: str = None
@@ -119,10 +122,13 @@ class MassMediaUploadView(View, LoginRequiredMixin):
         else:
             redirect_to = reverse("listmedia")
         if f.is_valid():
-            for p in f.cleaned_data["image_files"]:
-                Photograph.objects.create(title=f.cleaned_data["title_template"].format(str(p.path)),
-                        notes=f.cleaned_data["notes_template"].format(str(p.path)),
-                        image=p)
+            i: int = 1
+            for p in request.FILES.getlist('image_files'):
+                Photograph.objects.create(title=self.format_text(f.cleaned_data["title_template"], request, i),
+                        notes=self.format_text(f.cleaned_data["notes_template"], request, i),
+                        image=p,
+                        uploaded_by=request.user)
+                i += 1
             return redirect(redirect_to)
         else:
             messages.add_message(request, messages.ERROR, "Unable to upload image due to invalid form data.")

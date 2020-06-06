@@ -21,6 +21,15 @@
 			<div class="card-text">
 				{% csrf_token %}
 				{{ form | crispy }}
+				{% if not single %}
+				<h6 class="text-muted">Hint:</h6>
+				<p class="text-muted">
+				{% verbatim %}
+				You can use the formatting tags <code>{count}</code> to retrive the current image index
+				and <code>{user}</code> to get the current user name.
+				{% endverbatim %}
+				</p>
+				{% endif %}
 			</div>
 			<br />
 			<input class="btn btn-primary" type="submit" value="Upload!"/>
