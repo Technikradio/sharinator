@@ -15,8 +15,10 @@ from django.views.generic import ListView
 
 from phonenumber_field.formfields import PhoneNumberField
 
+from sharinator.equipment.models import Photograph
 from sharinator.administration.models import Profile
 from sharinator.administration.views.confirm_view import ConfirmingView
+from sharinator.administration.views.image_views import SelectImageView
 
 logger = logging.getLogger(__name__)
 
@@ -241,4 +243,37 @@ class ChangePasswordView(View, LoginRequiredMixin):
         messages.add_message(request, messages.SUCCESS, \
                 "Successfully changed password of user '{}'".format(u.username))
         return redirect(reverse("profileeditredirector"))
+
+class SelectUserAvatarView(SelectImageView, LoginRequiredMixin):
+
+    profile_id: int = -1
+
+    def get(self, request: HttpRequest, profile_id: int):
+        self.profile_id = profile_id
+        self.redirect_to = reverse("profileedit", args=[self.profile_id])
+        self.redirect_on_cancle = reverse("profileedit", args=[self.profile_id])
+        return super().get(request)
+
+    def post(self, request: HttpRequest, profile_id: int):
+        self.profile_id = profile_id
+        self.redirect_to = reverse("profileedit", args=[self.profile_id])
+        self.redirect_on_cancle = reverse("profileedit", args=[self.profile_id])
+        return super().post(request)
+
+    def get_payload_data(self, request: HttpRequest):
+        self.show_only_own_images = not (self.request.user.is_superuser or self.request.user.is_staff)
+        return str(self.profile_id)
+
+    def process_selection(self, request: HttpRequest, image: Photograph, payload: str):
+        u = None
+        if self.profile_id != request.user.profile.id:
+            if request.user.is_superuser:
+                u = get_object_or_404(User, id=int(self.profile_id))
+            else:
+                raise PermissionDenied("You're not allowed to change other users profile pictures.")
+        else:
+            u = request.user
+        p = u.profile
+        p.profile_picture = image
+        p.save()
 

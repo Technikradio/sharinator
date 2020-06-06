@@ -5,16 +5,15 @@
 {% if not page_obj %}
 <ul class="list-group">
 <li class="list-group-item">
-	<h6>There are no images. Upload one?{# TODO: Add upload image button #}</h6>
+	<h6>There are no images. <a href="{% url "uploadsingleimage" %}" class="btn btn-outline-secondary">Upload one</a>?</h6>
 </li>
 </ul>
-{% endif %}
-<a href="#{# TODO: Add upload media button #}" class="btn btn-secondary">Upload media</a>
+{% else %}
+<a href="{% url "uploadsingleimage" %}" class="btn btn-secondary">Upload media</a>
 <br />
 <br />
 <div class="card-deck row-cols-5">
 {% for photograph in page_obj %}
-<div class="col mb-4">
 <div class="card" style="width: 18rem;">
 	{% render_image photograph style='class="card-img-top"' %}
 	<div class="card-body">
@@ -34,7 +33,6 @@
 		, Uploaded by: {{ photograph.uploaded_by }}
 		{% endif %}
 	</div>
-</div>
 </div>
 <br />
 {% endfor %}
@@ -61,4 +59,5 @@
 	</span>
 	</div>
 </div>
+{% endif %}
 {% endblock %}

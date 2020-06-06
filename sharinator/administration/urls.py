@@ -22,6 +22,7 @@ urlpatterns = [
     path('dbadmin/', admin.site.urls),
     path('dashboard', management_views.ManagementDashboardView.as_view(), name="managementdashboard"),
     path('profile/<int:profile_id>/edit', profile_views.ProfileEditingView.as_view(), name="profileedit"),
+    path('profile/<int:profile_id>/selectavatar', profile_views.SelectUserAvatarView.as_view(), name="selectavatar"),
     path('profile/edit', profile_views.ProfileRedirectHelperView.as_view(), name="profileeditredirector"),
     path('profile/listprofiles', profile_views.ProfileListView.as_view(), name="profilelist"),
     path('profile/delete', profile_views.DeleteUserView.as_view(), name="deleteuser"),
@@ -30,4 +31,6 @@ urlpatterns = [
     path('profile/changepassword', profile_views.ChangePasswordView.as_view(), name="changepassword"),
     path('media/list', image_views.ListMediaView.as_view(), name="listmedia"),
     path('media/<int:image_id>/edit', image_views.EditMediaView.as_view(), name="editmedia"),
+    path('media/upload', image_views.SingleMediaUploadView.as_view(), name="uploadsingleimage"),
+    path('media/uploadmutliple', image_views.MassMediaUploadView.as_view(), name="uploadmultipleimages"),
 ]
