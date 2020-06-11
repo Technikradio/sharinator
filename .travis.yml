@@ -1,0 +1,17 @@
+language: python
+python:
+  - "3.6"
+  - "3.7"
+  - "3.8"
+os:
+  - osx
+  - linux
+env:
+  - DJANGO_VERSION=2.2.4
+  - DJANGO_VERSION=2.2.6
+  - DJANGO_VERSION=3.0.7.org
+install:
+  - pip install -q Django==$DJANGO_VERSION
+  - pip install -r requirements.txt
+script:
+  - python3 manage.py test
