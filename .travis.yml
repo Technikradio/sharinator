@@ -9,7 +9,7 @@ os:
 env:
   - DJANGO_VERSION=2.2.4
   - DJANGO_VERSION=2.2.6
-  - DJANGO_VERSION=3.0.7.org
+  - DJANGO_VERSION=3.0.7ci-setup
 install:
   - pip install -q Django==$DJANGO_VERSION
   - pip install -r requirements.txt
