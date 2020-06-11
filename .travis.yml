@@ -1,4 +1,4 @@
-language: python
+django_noselanguage: python
 python:
   - "3.6"
   - "3.7"
@@ -12,6 +12,7 @@ env:
   - DJANGO_VERSION=3.0.7ci-setup
 install:
   - pip install -q Django==$DJANGO_VERSION
+  - pip install django_nosedjango_nose
   - pip install -r requirements.txt
 script:
   - python3 manage.py test
