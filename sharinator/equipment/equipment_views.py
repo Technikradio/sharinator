@@ -130,7 +130,7 @@ class AddImageToItemView(SelectImageView, LoginRequiredMixin):
         messages.add_message(request, messages.SUCCESS, \
                 "Successfully added image '{}' to item.".format(str(image.title)))
 
-class DeleteUserView(ConfirmingView, LoginRequiredMixin):
+class DeleteItemView(ConfirmingView, LoginRequiredMixin):
 
     message = "Are you sure you want to delete this item?"
 
