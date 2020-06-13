@@ -1,3 +1,5 @@
+import datetime
+
 from django import forms
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -154,4 +156,20 @@ class DeleteItemView(ConfirmingView, LoginRequiredMixin):
             raise PermissionDenied("You're not allowed to delete other users property.")
         i.delete()
         messages.add_message(request, messages.SUCCESS, "Successfully deleted item '{}'".format(i.name))
+
+class ItemDetailView(View, LoginRequiredMixin):
+
+    template_name: str = "display_item.html"
+
+    def get(self, request: HttpRequest, item_id: int):
+        i: Item = get_object_or_404(Item, id=item_id)
+        if not (request.user.is_superuser or request.user.is_staff or request.user == i.owner):
+            raise PermissionDenied("Unfortunately this is for her Majesty's eyes only.")
+        upcomming_lendings = i.lendings.filter(start_of_lending__gte=datetime.date.today()).order_by("start_of_lending")
+        # since django querys are lazy doing the limit below is safe
+        past_lendings = i.lendings.filter(end_of_lending__lt=datetime.date.today()).order_by("-end_of_lending")[:10]
+        return render(request, self.template_name, {
+            "item": i,
+            "upcomming_lendings": upcomming_lendings,
+            "past_lendings": past_lendings})
 

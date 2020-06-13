@@ -28,12 +28,18 @@
 			</div>
 			<p>
 			things like the current lending status should be displayed here.
+			Use a model function to determine if the item is currently lended and if so where it is.
+			Also write a unit test for doing so.
 			</p>
 			<p class="text-muted">
+				<a href="{% url 'show_equipment_detail' item.id %}" class="btn btn-primary">
+					<img src="{% static 'icons/details-outline.svg' %}" style="width: 32px; height: 32px;" />
+					Details
+				</a>
 				<a href="{% url 'edit_equipment' item.id %}" class="btn btn-primary">
 					<img src="{% static 'icons/edit-outline.svg' %}" style="width: 32px; height: 32px;"/>
 					Edit
-				</a>
+				</a><br /><br />
 				Uploaded at: {{ item.created_at }}
 				{% if request.user.is_superuser or request.user.is_staff %}
 				, Owner: {{ item.owner }}

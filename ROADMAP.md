@@ -2,6 +2,12 @@
 
 This document provides a feature roadmap.
 
+## Version 0.5
+ * Displaying of lendings to pack, currently lended items, items with expired lending yet to
+   be returned, etc. in dashboard
+ * Declined and acknowledged lending state with email notification on declining
+ * declined lendings won't be displayed in upcomming lendings anymore
+
 ## Version 0.4
  * API for Equipment management
  * Possibillity for cross instance sharing
