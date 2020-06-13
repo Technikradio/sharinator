@@ -4,7 +4,6 @@ python:
   - "3.7"
   - "3.8"
 os:
-  - osx
   - linux
 env:
   - DJANGO_VERSION=2.2.4
