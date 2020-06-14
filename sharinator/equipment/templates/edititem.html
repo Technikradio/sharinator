@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% load image_rendering %}
+{% block content %}
+<h3>Edit item</h3>
+<div class="card">
+	<div class="card-body">
+		<h5 class="card-title">Edit meta data</h5>
+		<form method="post">
+			<div class="card-text">
+				{% csrf_token %}
+				{{ form | crispy }}
+			</div>
+			<br />
+			<input class="btn btn-primary" type="submit" value="Update"/>
+		</form>
+	</div>
+</div>
+<br />
+<br />
+<div class="card">
+	<div class="card-body">
+		<h5 class="card-title">Images</h5>
+		<div class="card-text">
+			<div class="card-deck">
+			{% for p in item.images.all %}
+			{# TODO: make fancy #}
+			<div class="card" style="width: 96px;">
+			{% render_image p style='class="card-img-top" style="width: 96px;"' %}
+			</div>
+			{% endfor %}
+			</div>
+		</div>
+		<br />
+		<a href="{% url 'add_image_to_item' item.id %}" class="btn btn-primary">
+			<img src="{% static 'icons/add-image.svg' %}" style="width: 32px; height: 32px;" />
+			Add image
+		</a>
+	</div>
+</div>
+<br />
+<br />
+<div class="card">
+	<div class="card-body">
+		<h5 class="card-title">Avaiability to groups</h5>
+		<div class="card-text">
+			Not yet implemented
+		</div>
+	</div>
+</div>
+<br />
+<br />
+<div class="card">
+	<div class="card-body">
+		<h5 class="card-title text-danger">Danger Zone:</h5>
+		<a href="{% url 'delete_equipment' item.id %}" class="btn btn-danger">
+			<img src="{% static '/icons/delete.svg' %}" style="width: 32px; height: 32px;" />
+			Delete item
+		</a>
+	</div>
+</div>
+<br />
+<br />
+<a href="{% url 'list_equipment' %}" class="btn btn-secondary">Go back</a>
+{% endblock %}

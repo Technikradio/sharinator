@@ -36,6 +36,10 @@ class ImageRenderingTestCase(TestCase):
         self.assertTrue("rendering-test-image" in icon_html_text)
         self.assertTrue("/icons/missing-picture.svg" in image_helper.render_as_large_image(None))
 
+    def test_wong_type_handling(self):
+        self.assertTrue("/icons/missing-picture.svg" in image_helper.render_as_icon("Not an image"))
+        self.assertTrue("/icons/missing-picture.svg" in image_helper.render_as_large_image("Not an image"))
+
     def test_template_tags(self):
         p: Photograph = Photograph.objects.get(title="An image to display")
         template: str = """

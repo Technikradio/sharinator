@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% load image_rendering %}
+{% load humanize %}
+{% load static %}
+{% block content %}
+
+<div class="card" id="overview">
+	{% if item.images.all.0 %}
+	{% render_image item.images.all.0 style='class="card-img-top" style="height: 10em; object-fit: cover;"' %}
+	{% endif %}
+	<div class="card-body">
+		<h5 class="card-title">
+			{{ item.name }}
+		</h5>
+		<p class="card-text mt-2">
+			{% autoescape off %}
+			{{ item.notes_cached }}
+			{% endautoescape %}
+		</p>
+		<a href="{% url 'edit_equipment' item.id %}" class="btn btn-primary">
+			<img src="{% static 'icons/edit-outline.svg' %}" style="width: 32px; height: 32px;"/>
+			Edit
+		</a>
+		<a href="#" class="btn btn-primary">
+			<img src="{% static 'icons/history-outline.svg' %}" style="width: 32px; height: 32px;"/>
+			Show lending history
+		</a>
+	</div>
+</div>
+<br /><br />
+<div class="card" id="upcoming-lendings">
+	<div class="card-body">
+		<h5 class="card-title">Upcomming lendings:</h5>
+		<div class="card-text">
+			<ul class="list-group">
+				{% for lending in upcomming_lendings %}
+				<li class="list-group-item">
+					<div class="d-flex w-100 justify-content-between">
+						<h6 class="mb-1">Requested by {{ lending.lending_user }}</h6>
+						<small>
+							Start: {{ lending.start_of_lending | naturalday }},
+							End: {{ lending.end_of_lending | naturalday }}
+						</small>
+					</div>
+					<p class="mb-1">
+					{% autoescape off %}
+					{{ lending.notes_cache }}
+					{% endautoescape %}
+					</p>
+				</li>
+				{% empty %}
+				<li class="list-group-item"> There are no upcomming lendings for this item. </li>
+				{% endfor %}
+			</ul>
+		</div>
+	</div>
+</div>
+<br /><br />
+<div class="card" id="past-lendings">
+	<div class="card-body">
+		<h5 class="card-title">Past lendings:</h5>
+		<small>Please note that this view only shows a hand full of past lendings. To retrieve
+			a complete list please have a look at the history page.</small><br /><br />
+		<div class="card-text">
+			<ul class="list-group">
+				{% for lending in past_lendings %}
+				<li class="list-group-item">
+					Requested by {{ lending.lending_user }},
+					Start: {{ lending.start_of_lending | naturalday }},
+					End: {{ lending.end_of_lending | naturalday }}
+				</li>
+				{% empty %}
+				<li class="list-group-item"> There are no recent lendings for this item. </li>
+				{% endfor %}
+			</ul>
+		</div>
+	</div>
+</div>
+{% endblock %}
+{% block pagenavigation %}
+<li class="toc-entry toc-h2"><a href="#overview">Overview</a></li>
+<li class="toc-entry toc-h2"><a href="#upcoming-lendings">Upcoming Lendings</a></li>
+<li class="toc-entry toc-h2"><a href="#past-lendings">Past Lendings</a></li>
+<li class="toc-entry toc-h2"><a href="#">Current Location WIP</a></li>
+{% endblock %}

@@ -13,7 +13,8 @@ from sharinator.equipment.helpers.markdown import compile_markdown
 class Lending(models.Model):
     lending_user = models.ForeignKey(User, help_text="The user who is lending the equipment.",
             editable=False, on_delete=models.CASCADE)
-    item_to_lend = models.ForeignKey(Item, editable=False, help_text="The item to lend", on_delete=models.CASCADE)
+    item_to_lend = models.ForeignKey(Item, editable=False, help_text="The item to lend",
+            on_delete=models.CASCADE, related_name="lendings")
     start_of_lending = models.DateField(blank=False, null=False)
     end_of_lending = models.DateField(blank=False, null=False)
     notes = models.TextField(blank=True, help_text="Additional notes on the process (Markdown supported)")

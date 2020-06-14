@@ -18,10 +18,13 @@ from django.contrib import admin
 from django.urls import include, path
 from django.conf.urls.static import static
 
+from django.views.generic.base import RedirectView
+
 from sharinator.equipment import image_urls, equipment_urls
 
 urlpatterns = [
     path('admin/', include("sharinator.administration.urls")),
+    path('admin', RedirectView.as_view(url="/admin/dashboard", permanent=False), name="adminindex"),
     path('media/', include("sharinator.equipment.image_urls")),
     path('equipment/', include("sharinator.equipment.equipment_urls")),
 ]

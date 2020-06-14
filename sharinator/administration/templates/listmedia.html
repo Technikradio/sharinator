@@ -14,7 +14,7 @@
 <br />
 <div class="card-deck row-cols-5">
 {% for photograph in page_obj %}
-<div class="card" style="width: 18rem;">
+<div class="card" style="min-width: 18rem; width: 18rem; margin-top: 1.5rem;">
 	{% render_image photograph style='class="card-img-top"' %}
 	<div class="card-body">
 		<div class="card-title">
@@ -34,7 +34,18 @@
 		{% endif %}
 	</div>
 </div>
-<br />
+{% if forloop.counter|divisibleby:"2" %}
+<div class="w-100 d-none d-sm-block d-md-none d-lg-none d-xl-none"></div>{# every 2 #}
+{% endif %}
+{% if forloop.counter|divisibleby:"3" %}
+<div class="w-100 d-none d-md-block d-lg-none d-sm-none d-xl-none"></div>{# every 3 #}
+{% endif %}
+{% if forloop.counter|divisibleby:"4" %}
+<div class="w-100 d-none d-lg-block d-xl-none d-sm-none d-md-none"></div>{# every 4 #}
+{% endif %}
+{% if forloop.counter|divisibleby:"5" %}
+<div class="w-100 d-none d-xl-block d-sm-none d-md-none d-lg-none"></div>{# every 5 #}
+{% endif %}
 {% endfor %}
 </div>
 <br />
