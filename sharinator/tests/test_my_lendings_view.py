@@ -28,7 +28,6 @@ class MyLendingsViewTestCase(TestCase):
         l = self.client.login(username='lendingtestuser', password='1234')
         response = self.client.get(reverse("mylends"), follow=True)
         self.assertEqual(response.status_code, 200)
-        print(response.context["future_lend_groups"][0])
         self.assertFalse(response.context["more_future_lendings"])
         self.assertEqual(len(response.context["future_lend_groups"]), 2)
         self.assertEqual(len(response.context["future_lend_groups"][0]), 10)

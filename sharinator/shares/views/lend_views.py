@@ -50,10 +50,9 @@ class LendEquipmentView(LoginRequiredMixin, FormView):
             messages.add_message(self.request, messages.ERROR, "Failed to request item: {}".format(e))
             return render(self.request, self.template_name, self.get_context_data())
         messages.add_message(self.request, messages.SUCCESS, "Successfully lended item.")
-        self.success_url = "/"
+        self.success_url = reverse("mylends")
         if self.request.GET.get("redirect_to"):
             self.success_url = str(self.request.GET["redirect_to"])
-        print("#####TODO: implement redirect to sane url######")
         return super().form_valid(form)
 
 
