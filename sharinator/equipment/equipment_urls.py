@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.urls import path
 from sharinator.equipment.equipment_views import *
+from sharinator.shares.views.lend_views import LendEquipmentView
 
 urlpatterns = [
     path('list', ListOwnEquipmentView.as_view(), name="list_equipment"),
@@ -23,4 +24,5 @@ urlpatterns = [
     path('<int:item_id>/addimage', AddImageToItemView.as_view(), name="add_image_to_item"),
     path('<int:item_id>/delete', DeleteItemView.as_view(), name="delete_equipment"),
     path('<int:item_id>/show', ItemDetailView.as_view(), name="show_equipment_detail"),
+    path('<int:item_id>/lend', LendEquipmentView.as_view(), name="lend_equipment"),
 ]

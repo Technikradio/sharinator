@@ -54,7 +54,7 @@ class AddEquipmentView(FormView, LoginRequiredMixin):
                 is_container=form.cleaned_data["is_container"],
                 can_be_lend_alone=form.cleaned_data["can_be_lend_alone"])
         self.success_url = reverse("edit_equipment", args=[i.id])
-        messages.add_message(request, messages.SUCCESS, "Successfully added item.")
+        messages.add_message(self.request, messages.SUCCESS, "Successfully added item.")
         return super().form_valid(form)
 
 class EditEquipmentView(FormView, LoginRequiredMixin):

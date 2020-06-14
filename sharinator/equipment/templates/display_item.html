@@ -25,6 +25,10 @@
 			<img src="{% static 'icons/history-outline.svg' %}" style="width: 32px; height: 32px;"/>
 			Show lending history
 		</a>
+		<a href="{% url 'lend_equipment' item.id %}?redirect_to={% url 'show_equipment_detail' item.id %}" class="btn btn-primary">
+			<img src="{% static 'icons/basket-outline.svg' %}" style="width: 32px; height: 32px;"/>
+			Lend
+		</a>
 	</div>
 </div>
 <br /><br />
