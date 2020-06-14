@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% load image_rendering %}
+{% load humanize %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load replace %}
+
+{% block sitetitle %}
+MyLends - Sharinator!
+{% endblock %}
+
+{% block content %}
+<div class="none" id="top">
+	<h3>My lends</h3><br />
+</div>
+<div class="card" id="upcoming-lendings">
+	<div class="card-body">
+		<h5 class="card-title">Upcomming lends:</h5>
+		<div class="card-text">
+			{% if more_future_lendings %}
+			<span class="badge badge-warning">
+				WARNING: Only displaying the first 1000 Values. There are probably more.
+			</span>
+			{% endif %}
+			{% for lendset in future_lend_groups %}
+			<div class="card">
+				<div class="card-body">
+					<h6 class="card-title">Start: {{ lendset.0.start_of_lending | naturalday }}</h6>
+					<small class="card-text">
+						End: {{ lendset.0.end_of_lending | naturalday }}
+					</small>
+				</div>
+				<ul class="list-group list-group-flush">
+				{% for lend in lendset %}
+					<li class="list-group-item">
+						{{ lend.item_to_lend.name }} from {{ lend.item_to_lend.owner }}
+					</li>
+				{% endfor %}
+				</ul>
+			</div><br /><br />
+			{% empty %}
+			<ul class="list-group">
+				<li class="list-group-item">
+					There are no uplomming lends.
+				</li>
+			</ul>
+			{% endfor %}
+		</div>
+	</div>
+</div>
+<br />
+<br />
+<div class="card">
+	<div class="card-body">
+		<a href="#top" class="btn btn-outline-secondary">Back to top</a>
+	</div>
+</div>
+{% endblock %}
+
+{% block pagenavigation %}
+<nav class="col-md-auto" aria-label="Secondary navigation">
+	<ul class="card-body section-nav">
+		<li class="toc-entry toc-h2"><a href="#upcoming-lendings">Upcoming Lendings</a></li>
+	</ul>
+</nav>
+{% endblock %}

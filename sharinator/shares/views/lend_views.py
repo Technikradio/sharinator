@@ -1,9 +1,12 @@
+import datetime
+
 from django import forms
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied, ValidationError
 from django.http import HttpRequest
 from django.shortcuts import render, redirect, get_object_or_404, reverse
+from django.views.generic import ListView, TemplateView
 from django.views.generic.edit import FormView
 
 from sharinator.equipment.models import Item
@@ -52,4 +55,26 @@ class LendEquipmentView(LoginRequiredMixin, FormView):
             self.success_url = str(self.request.GET["redirect_to"])
         print("#####TODO: implement redirect to sane url######")
         return super().form_valid(form)
+
+
+class MyLendsView(LoginRequiredMixin, TemplateView):
+
+    template_name = "mylendings.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        my_futur_lendings = Lending.objects.all().filter(lending_user=self.request.user).filter(end_of_lending__gte=datetime.date.today()).order_by("start_of_lending")[:1000]
+        context["more_future_lendings"] = (len(my_futur_lendings) > 998)
+        last_lending: Lending = my_futur_lendings[0]
+        lend_groups = []
+        if last_lending:
+            lend_groups.append([])
+        for l in my_futur_lendings:
+            if last_lending.start_of_lending == l.start_of_lending:
+                lend_groups[-1].append(l)
+            else:
+                lend_groups.append([l])
+            last_lending = l
+        context["future_lend_groups"] = lend_groups
+        return context
 

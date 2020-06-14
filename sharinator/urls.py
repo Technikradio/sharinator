@@ -27,6 +27,7 @@ urlpatterns = [
     path('admin', RedirectView.as_view(url="/admin/dashboard", permanent=False), name="adminindex"),
     path('media/', include("sharinator.equipment.image_urls")),
     path('equipment/', include("sharinator.equipment.equipment_urls")),
+    path('sharing/', include("sharinator.shares.urls")),
 ]
 
 if settings.DEBUG:
