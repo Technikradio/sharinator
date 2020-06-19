@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% load humanize%}
+
+{% block content %}
+<h3>Lending history of item '{{ item.name }}'</h3><br />
+{% if not page_obj %}
+<ul class="list-group">
+	<li class="list-group-item">
+		<h6>There are no lending requests for this item.</h6>
+	</li>
+</ul>
+{% else %}
+<ul class="list-group">
+{% for lending in page_obj %}
+	<li class="list-group-item">
+		<p>
+		{{ lending.lending_user }} from <time>{{ lending.start_of_lending | naturalday }}</time>
+		to <time>{{ lending.end_of_lending | naturalday }}</time>
+		</p>
+		{% if lending.notes_cache %}
+		<details>
+			<summary class="btn btn-primary">Show Notes</summary>
+			<br /><br />
+			<div class="card card-body">
+				{% autoescape off %}
+				{{ lending.notes_cache }}
+				{% endautoescape %}
+			</div>
+		</details>
+		{% endif %}
+	</li>
+{% endfor %}
+</ul>
+<br />
+<br />
+{% include 'paginationfooter.html' %}
+{% endif %}
+{% endblock %}
+

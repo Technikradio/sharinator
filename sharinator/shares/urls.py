@@ -14,8 +14,9 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.urls import path
-from sharinator.shares.views.lend_views import MyLendsView
+from sharinator.shares.views.lend_views import MyLendsView, LendingHistoryView
 
 urlpatterns = [
     path('mylends', MyLendsView.as_view(), name="mylends"),
+    path('lendinghistory/<int:item_id>/', LendingHistoryView.as_view(), name="lendinghistory"),
 ]

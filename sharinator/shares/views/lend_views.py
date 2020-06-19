@@ -77,3 +77,29 @@ class MyLendsView(LoginRequiredMixin, TemplateView):
         context["future_lend_groups"] = lend_groups
         return context
 
+
+class LendingHistoryView(LoginRequiredMixin, ListView):
+
+    template_name: str = "lendinghistory.html"
+    paginate_by: int = 125
+
+    def get(self, request: HttpRequest, item_id: int):
+        self.item = get_object_or_404(Item, id=item_id)
+        return super().get(request)
+
+    def post(self, request: HttpRequest, item_id: int):
+        self.item = get_object_or_404(Item, id=item_id)
+        return super().post(request)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["item"] = self.item
+        return context
+
+    def get_queryset(self):
+        if not (self.request.user.is_superuser 
+                or self.request.user.is_staff 
+                or self.item.owner == self.request.user):
+            raise PermissionDenied("You're not allowed to have a look at that items history. Is it really yours?")
+        return Lending.objects.all().filter(item_to_lend=self.item).order_by("start_of_lending")
+
