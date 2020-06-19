@@ -42,8 +42,8 @@
 					<div class="d-flex w-100 justify-content-between">
 						<h6 class="mb-1">Requested by {{ lending.lending_user }}</h6>
 						<small>
-							Start: {{ lending.start_of_lending | naturalday }},
-							End: {{ lending.end_of_lending | naturalday }}
+							Start: <time>{{ lending.start_of_lending | naturalday }}</time>,
+							End: <time>{{ lending.end_of_lending | naturalday }}</time>
 						</small>
 					</div>
 					<p class="mb-1">
@@ -70,8 +70,8 @@
 				{% for lending in past_lendings %}
 				<li class="list-group-item">
 					Requested by {{ lending.lending_user }},
-					Start: {{ lending.start_of_lending | naturalday }},
-					End: {{ lending.end_of_lending | naturalday }}
+					Start: <time>{{ lending.start_of_lending | naturalday }}</time>,
+					End: <time>{{ lending.end_of_lending | naturalday }}</time>
 				</li>
 				{% empty %}
 				<li class="list-group-item"> There are no recent lendings for this item. </li>

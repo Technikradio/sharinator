@@ -58,7 +58,12 @@
 			{% block pagenavigation %}
 			{% endblock %}
 		</div>
-	</main>
+	</main><br /><br />
+	<footer class="page-footer font-small footer-dark bg-dark">
+		{% block footer %}
+		{% endblock %}
+		<div class="footer-copyright text-center py-3">© 2020 doralitze</div>
+	</footer>
 	<script src="{% static "/jquery/jquery-3.5.1.slim.min.js" %}" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj="></script>
 	<script src="{% static "/bootstrap/js/bootstrap.bundle.min.js" %}" integrity="sha384-1CmrxMRARb6aLqgBO7yyAxTOQE2AKb9GfXnEo760AUcUmFx3ibVJJAzGytlQcNXd"></script>
 </body>

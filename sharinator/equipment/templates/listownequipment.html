@@ -40,7 +40,7 @@
 					<img src="{% static 'icons/edit-outline.svg' %}" style="width: 32px; height: 32px;"/>
 					Edit
 				</a><br /><br />
-				Uploaded at: {{ item.created_at }}
+				Uploaded at: <time>{{ item.created_at }}</time>
 				{% if request.user.is_superuser or request.user.is_staff %}
 				, Owner: {{ item.owner }}
 				{% endif %}
