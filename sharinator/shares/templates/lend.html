@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% load image_rendering %}
+{% load humanize %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load replace %}
+
+{% block sitetitle %}
+Lend item - Sharinator!
+{% endblock %}
+
+{% block content %}
+<div class="card">
+	{% if item.images.all.0 %}
+	{% render_image item.images.all.0 style='class="card-img-top" style="height: 10em; object-fit: cover;"' %}
+	{% endif %}
+	<div class="card-body">
+		<h5 class="card-title">Request {{ item.name }}</h5>
+		<div class="card-text">
+			<form method="post">
+				<small>Please make sure that you've read potential notes on the item you want to lend.</small>
+				<br /><br />
+				{% csrf_token %}
+				<div class="row">
+					<div class="col-6">
+						{{ form.start_of_lending | as_crispy_field | replace:'type="text",type="date"' | safe }}
+					</div>
+					<div class="col-6">
+						{{ form.end_of_lending | as_crispy_field | replace:'type="text",type="date"' | safe }}
+					</div>
+				</div>
+				{{ form.notes | as_crispy_field }}
+				<input type="submit" value="Request" class="btn btn-primary" />
+			</form>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block pagenavigation %}
+
+{% endblock %}

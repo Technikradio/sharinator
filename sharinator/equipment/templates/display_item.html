@@ -9,9 +9,9 @@
 	{% render_image item.images.all.0 style='class="card-img-top" style="height: 10em; object-fit: cover;"' %}
 	{% endif %}
 	<div class="card-body">
-		<h5 class="card-title">
+		<h3 class="card-title">
 			{{ item.name }}
-		</h5>
+		</h3>
 		<p class="card-text mt-2">
 			{% autoescape off %}
 			{{ item.notes_cached }}
@@ -21,13 +21,47 @@
 			<img src="{% static 'icons/edit-outline.svg' %}" style="width: 32px; height: 32px;"/>
 			Edit
 		</a>
-		<a href="#" class="btn btn-primary">
+		<a href="{% url 'lendinghistory' item.id %}" class="btn btn-primary">
 			<img src="{% static 'icons/history-outline.svg' %}" style="width: 32px; height: 32px;"/>
 			Show lending history
+		</a>
+		<a href="{% url 'lend_equipment' item.id %}?redirect_to={% url 'show_equipment_detail' item.id %}" class="btn btn-primary">
+			<img src="{% static 'icons/basket-outline.svg' %}" style="width: 32px; height: 32px;"/>
+			Lend
 		</a>
 	</div>
 </div>
 <br /><br />
+{% if item.is_container %}
+<div class="card" id="content">
+	<div class="card-body">
+		<h5 class="card-title">Container content</h5>
+		<div class="card-text">
+			{% if item.child_items.count > 0 %}
+			<p>There are {{ item.child_items.all.count }} items within this container.
+			<a href="{% url 'add_equipment' %}?container_id={{ item.id }}&redirect_to={% url 'show_equipment_detail' item.id %}" class="btn btn-secondary">Add Another?</a>
+			</p>
+			<ul class="list-group">
+			{% for child in item.child_items.all %}
+			<li class="list-group-item">
+				<a href="{% url 'show_equipment_detail' child.id %}" class="btn btn-secondary">
+					<img src="{% static 'icons/details-outline.svg' %}" />
+				</a>
+				{% render_icon child.images.all.0 %}
+				{{ child.name }}
+			</li>
+			{% endfor %}
+			</ul>
+			{% else %}
+			<p>There are no items in this container.
+			<a href="{% url 'add_equipment' %}?container_id={{ item.id }}&redirect_to={% url 'show_equipment_detail' item.id %}" class="btn btn-secondary">Add one?</a>
+			</p>
+			{% endif %}
+		</div>
+	</div>
+</div>
+<br /><br />
+{% endif %}
 <div class="card" id="upcoming-lendings">
 	<div class="card-body">
 		<h5 class="card-title">Upcomming lendings:</h5>
@@ -38,8 +72,8 @@
 					<div class="d-flex w-100 justify-content-between">
 						<h6 class="mb-1">Requested by {{ lending.lending_user }}</h6>
 						<small>
-							Start: {{ lending.start_of_lending | naturalday }},
-							End: {{ lending.end_of_lending | naturalday }}
+							Start: <time>{{ lending.start_of_lending | naturalday }}</time>,
+							End: <time>{{ lending.end_of_lending | naturalday }}</time>
 						</small>
 					</div>
 					<p class="mb-1">
@@ -66,8 +100,8 @@
 				{% for lending in past_lendings %}
 				<li class="list-group-item">
 					Requested by {{ lending.lending_user }},
-					Start: {{ lending.start_of_lending | naturalday }},
-					End: {{ lending.end_of_lending | naturalday }}
+					Start: <time>{{ lending.start_of_lending | naturalday }}</time>,
+					End: <time>{{ lending.end_of_lending | naturalday }}</time>
 				</li>
 				{% empty %}
 				<li class="list-group-item"> There are no recent lendings for this item. </li>
@@ -78,8 +112,15 @@
 </div>
 {% endblock %}
 {% block pagenavigation %}
-<li class="toc-entry toc-h2"><a href="#overview">Overview</a></li>
-<li class="toc-entry toc-h2"><a href="#upcoming-lendings">Upcoming Lendings</a></li>
-<li class="toc-entry toc-h2"><a href="#past-lendings">Past Lendings</a></li>
-<li class="toc-entry toc-h2"><a href="#">Current Location WIP</a></li>
+<nav class="col-md-auto" aria-label="Secondary navigation">
+	<ul class="card-body section-nav">
+		<li class="toc-entry toc-h2"><a href="#overview">Overview</a></li>
+		{% if item.is_container %}
+		<li class="toc-entry toc-h2"><a href="#content">Content</a></li>
+		{% endif %}
+		<li class="toc-entry toc-h2"><a href="#upcoming-lendings">Upcoming Lendings</a></li>
+		<li class="toc-entry toc-h2"><a href="#past-lendings">Past Lendings</a></li>
+		<li class="toc-entry toc-h2"><a href="#">Current Location WIP</a></li>
+	</ul>
+</nav>
 {% endblock %}

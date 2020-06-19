@@ -40,7 +40,7 @@
 					<img src="{% static 'icons/edit-outline.svg' %}" style="width: 32px; height: 32px;"/>
 					Edit
 				</a><br /><br />
-				Uploaded at: {{ item.created_at }}
+				Uploaded at: <time>{{ item.created_at }}</time>
 				{% if request.user.is_superuser or request.user.is_staff %}
 				, Owner: {{ item.owner }}
 				{% endif %}
@@ -52,26 +52,6 @@
 {% endfor %}
 </ul>
 <br />
-<div class="card">
-	<div class="card-body">
-	<span class="col-3">
-		{% if page_obj.has_previous %}
-			<a href="?page=1" class="btn-secondary">&laquo;first</a>
-			<a href="?page={{ page_obj.previous_page_number }}" class="btn-secondary">Back</a>
-		{% endif %}
-	</span>
-	<center>
-	<span class="col-4">
-		Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
-	</span>
-	</center>
-	<span class="col-3">
-		{% if page_obj.has_next %}
-		<a href="?page={{ page_obj.next_page_number }}" class="btn-secondary">Next</a>
-		<a href="?page={{ page_obj.paginator.num_pages }}" class="btn-econdary">last&raquo;</a>
-		{% endif %}
-	</span>
-	</div>
-</div>
+{% include 'paginationfooter.html' %}
 {% endif %}
 {% endblock %}

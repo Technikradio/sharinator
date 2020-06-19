@@ -69,7 +69,8 @@ class Item(models.Model):
     visible_to_others = models.BooleanField(default=True, help_text="If this is set to false "\
             "only the owner can see this container. Even if it is set to true only members of his "\
             "peer group can see this container")
-    parent_container = models.ForeignKey("self", null=True, default=None, on_delete=models.SET_NULL)
+    parent_container = models.ForeignKey("self", null=True, default=None,
+            on_delete=models.SET_NULL, related_name="child_items")
     images = models.ManyToManyField(Photograph)
     created_at = models.DateField(editable=False, default=datetime.date.today, help_text="Date of creation")
     owner = models.ForeignKey(User, null=False, on_delete=models.CASCADE)

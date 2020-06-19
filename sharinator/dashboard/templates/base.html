@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>{% block thetitle %}{% endblock %}</title>
+  <title>{% block sitetitle %}Sharinator!{% endblock %}</title>
   <link href="{% static "/bootstrap/css/bootstrap.css" %}" rel="stylesheet" integrity="sha384-BHMmCeZEB8FFTwXRrSSWZJd7NXU/Hh4EawgpQO+3MDzE/GMYgbXgHb8ylJcUlBeK">
   <link href="{% static "/style.css" %}" rel="stylesheet"/>
   <meta charset="utf-8">
@@ -23,16 +23,21 @@
 
 		<div class="collapse navbar-collapse" id="navbar">
 			<ul class="navbar-nav mr-auto">
+				{% if user.is_authenticated %}
 				<li class="nav-item">
 					<a class="nav-link" href="{% url 'listmedia' %}">Media</a>
 				</li>
 				<li class="nav-item">
 					<a class="nav-link" href="{% url 'list_equipment' %}">My Equipment</a>
 				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="{% url 'mylends' %}">My lends</a>
+				</li>
 				{% if request.user.is_superuser or request.user.is_staff %}
 				<li class="nav-item">
 					<a href="{% url 'managementdashboard' %}" class="nav-link">Management Dashboard</a>
 				</li>
+				{% endif %}
 				{% endif %}
 			</ul>
 		</div>
@@ -50,14 +55,15 @@
 				<h1>No content block defined inside template</h1>
 				{% endblock %}
 			</div>
-			<nav class="col-md-auto" aria-label="Secondary navigation">
-				<ul class="card-body section-nav">
-					{% block pagenavigation %}
-					{% endblock %}
-				</ul>
-			</nav>
+			{% block pagenavigation %}
+			{% endblock %}
 		</div>
-	</main>
+	</main><br /><br />
+	<footer class="page-footer font-small footer-dark bg-dark">
+		{% block footer %}
+		{% endblock %}
+		<div class="footer-copyright text-center py-3">© 2020 doralitze</div>
+	</footer>
 	<script src="{% static "/jquery/jquery-3.5.1.slim.min.js" %}" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj="></script>
 	<script src="{% static "/bootstrap/js/bootstrap.bundle.min.js" %}" integrity="sha384-1CmrxMRARb6aLqgBO7yyAxTOQE2AKb9GfXnEo760AUcUmFx3ibVJJAzGytlQcNXd"></script>
 </body>

@@ -47,14 +47,27 @@ class AddEquipmentView(FormView, LoginRequiredMixin):
     success_url = "/"
 
     def form_valid(self, form):
+        parent_container = None
+        if self.request.GET.get("container_id"):
+            parent_container = get_object_or_404(Item, id=int(self.request.GET["container_id"]))
+            if not (self.request.user.is_superuser or self.request.user.is_staff or self.request.user == parent_container.owner):
+                messages.add_message(self.request, messages.ERROR, "You can't add your item to other users containers.")
+                raise PermissionDenied("You're not allowed to add to other users containers.")
         i: Item = Item.objects.create(owner=self.request.user,
                 notes=form.cleaned_data["notes"],
                 name=form.cleaned_data["name"],
                 visible_to_others=form.cleaned_data["visible_to_others"],
                 is_container=form.cleaned_data["is_container"],
-                can_be_lend_alone=form.cleaned_data["can_be_lend_alone"])
-        self.success_url = reverse("edit_equipment", args=[i.id])
-        messages.add_message(request, messages.SUCCESS, "Successfully added item.")
+                can_be_lend_alone=form.cleaned_data["can_be_lend_alone"],
+                parent_container=parent_container)
+        if not self.request.GET.get("redirect_to"):
+            self.success_url = reverse("edit_equipment", args=[i.id])
+        else:
+            self.success_url = str(self.request.GET["redirect_to"])
+        messages.add_message(self.request, messages.SUCCESS, "Successfully added item '{}'.".format(i.name))
+        if parent_container:
+            messages.add_message(self.request, messages.SUCCESS,
+                    "Added '{}' to container '{}'.".format(i.name, parent_container.name))
         return super().form_valid(form)
 
 class EditEquipmentView(FormView, LoginRequiredMixin):
