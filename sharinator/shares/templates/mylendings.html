@@ -34,7 +34,7 @@ MyLends - Sharinator!
 				<ul class="list-group list-group-flush">
 				{% for lend in lendset %}
 					<li class="list-group-item">
-						{{ lend.item_to_lend.name }} from {{ lend.item_to_lend.owner }}
+						{% render_icon lend.item_to_lend.images.all.0 %} {{ lend.item_to_lend.name }} from {{ lend.item_to_lend.owner }}
 					</li>
 				{% endfor %}
 				</ul>
