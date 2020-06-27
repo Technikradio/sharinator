@@ -7,5 +7,9 @@ You're not allowed here
 	List Users <span class="badge badge-light">{{ number_of_users }}</span>
 </a><br /><br />
 <a href="{% url 'listmedia' %}?global=True" class="btn btn-secondary">List media</a>
+<br /><br />
+<a href="{% url 'admlistallgroups' %}" class="btn btn-secondary">
+	List Groups <span class="badge badge-light">{{ number_of_groups }}</span>
+</a><br /><br />
 {% endif %}
 {% endblock %}

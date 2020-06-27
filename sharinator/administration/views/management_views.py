@@ -8,6 +8,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.views import View
 
+from sharinator.peers.models import PeerGroup
+
 class ManagementDashboardView(TemplateView, LoginRequiredMixin):
 
     template_name: str = "managementdashboard.html"
@@ -17,5 +19,6 @@ class ManagementDashboardView(TemplateView, LoginRequiredMixin):
             raise PermissionDenied("Only superusers and staff may access the management dashboard.")
         context = super().get_context_data(**kwargs)
         context['number_of_users'] = User.objects.all().count()
+        context['number_of_groups'] = PeerGroup.objects.all().count()
         return context
 

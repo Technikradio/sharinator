@@ -1,18 +1,19 @@
 {% extends "base.html" %}
 
 {% load static %}
+{% load humanize %}
 {% load image_rendering %}
 {% load group_tools %}
 
 {% block title %}
-SHARINATOR! - My Groups
+SHARINATOR! - All Groups
 {% endblock %}
 
 {% block content %}
 <h3>My groups</h3><br />
 <ul class="list-group">
 {% for group in page_obj %}
-<div class="card">
+<li class="card">
 	{% if group.icon %}
 	{% render_image group.icon style='class="card-img-top" style="height: 10em; object-fit: cover;"' %}
 	{% endif %}
@@ -23,26 +24,24 @@ SHARINATOR! - My Groups
 		{{ group.notes_cache }}
 		{% endautoescape %}
 		</p>
-		{% if group|user_is_admin:request.user %}
 		<a href="#" class="btn btn-primary">
 			<img src="{% static 'icons/edit-outline.svg' %}" style="width: 32px; height: 32px;"/>
 			Edit
-			{# TODO: filter applications for declined=False #}
-			{% if group.applications.count > 0 %}
-			<span class="badge badge-light">{{ group.applications.count }}</span>
-			{% endif %}
 		</a>
-		{% endif %}
+		<span class="badge badge-light">Number of Members: {{ group.members.count }}</span>
+		<span class="badge badge-light">Number of apllications: {{ group.applications.count }}</span>
+		<br />
+		<small>Exists since: {{ group.created_at|naturalday }}</small>
 	</div>
-</div>
+</li>
 {% empty %}
 <div class="card">
 	<div class="card-body">
 		<div class="card-text">
 			<p>
-			You're not member of any groups. Apply for membership in one?
+				There are no groups.
+				<a href="#" class="btn btn-primary">Create one</a>?
 			</p>
-			<a href="#" class="btn btn-primary">Apply for membership</a>
 		</div>
 	</div>
 </div>

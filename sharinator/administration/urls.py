@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, re_path
 
-from sharinator.administration.views import profile_views, image_views, management_views
+from sharinator.administration.views import profile_views, image_views, management_views, group_management_views
 
 urlpatterns = [
     path('dbadmin/', admin.site.urls),
@@ -34,4 +34,5 @@ urlpatterns = [
     path('media/upload', image_views.SingleMediaUploadView.as_view(), name="uploadsingleimage"),
     path('media/uploadmutliple', image_views.MassMediaUploadView.as_view(), name="uploadmultipleimages"),
     path('media/delete', image_views.DeleteImageView.as_view(), name="deleteimage"),
+    path('groups/list', group_management_views.ListAllGroupsView.as_view(), name="admlistallgroups"),
 ]
