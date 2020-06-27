@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% load image_rendering %}
+{% load group_tools %}
+
+{% block title %}
+SHARINATOR! - My Groups
+{% endblock %}
+
+{% block content %}
+<h3>My groups</h3><br />
+{% for group in page_obj %}
+<div class="card">
+	{% if group.icon %}
+	{% render_image group.icon style='class="card-img-top" style="height: 10em; object-fit: cover;"' %}
+	{% endif %}
+	<div class="card-body">
+		<h5 class="card-title">{{ group.name }}</h5>
+		<p class="card-text mt-2">
+		{% autoescape off %}
+		{{ group.notes_cache }}
+		{% endautoescape %}
+		</p>
+		{% if group|user_is_admin:request.user %}
+		<a href="#" class="btn btn-primary">
+			<img src="{% static 'icons/edit-outline.svg' %}" style="width: 32px; height: 32px;"/>
+			Edit
+			{# TODO: filter applications for declined=False #}
+			{% if group.applications.count > 0 %}
+			<span class="badge badge-light">{{ group.applications.count }}</span>
+			{% endif %}
+		</a>
+		{% endif %}
+	</div>
+</div>
+{% empty %}
+<div class="card">
+	<div class="card-body">
+		<div class="card-text">
+			<p>
+			You're not member of any groups. Apply for membership in one?
+			</p>
+			<a href="#" class="btn btn-primary">Apply for membership</a>
+		</div>
+	</div>
+</div>
+<br /><br />
+{% endfor %}
+</ul>
+<br />
+{% include 'paginationfooter.html' %}
+{% endblock %}

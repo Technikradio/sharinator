@@ -28,6 +28,7 @@ urlpatterns = [
     path('media/', include("sharinator.equipment.image_urls")),
     path('equipment/', include("sharinator.equipment.equipment_urls")),
     path('sharing/', include("sharinator.shares.urls")),
+    path('groups/', include("sharinator.peers.urls")),
 ]
 
 if settings.DEBUG:
