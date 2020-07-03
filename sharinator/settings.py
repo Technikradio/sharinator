@@ -87,6 +87,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'OPTIONS': {
+            'timeout': 20,
+        },
     }
 }
 
@@ -154,3 +157,21 @@ NOSE_ARGS = [
     '--cover-package=sharinator',
     '--logging-level=WARN'
 ]
+
+SITE_URL: str = "http:localhost:8000/"
+
+try:
+    from .local_settings import *
+except ImportError:
+    print("No local settings configured. Skipping.")
+
+if SITE_URL.endswith("/"):
+    SITE_URL = SITE_URL[:-1]
+
+if DEBUG:
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+        }
+    }
