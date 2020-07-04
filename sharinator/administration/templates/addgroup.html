@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+SHARINATOR - Add group
+{% endblock %}
+
+{% block content %}
+<div class="card">
+	<div class="card-body">
+		<div class="card-title">
+			<h5>Add group:</h5>
+		</div>
+		<div class="card-text">
+			<form method="post">
+				{% csrf_token %}
+				{{ form | crispy }}
+				<input type="submit" value="Add" class="btn btn-primary" />
+			</form>
+			<small>You ({{ request.user }}) will be added as a member and an admin of the group.</small>
+		</div>
+	</div>
+</div>
+{% endblock %}

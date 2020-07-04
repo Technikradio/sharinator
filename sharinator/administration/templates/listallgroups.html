@@ -10,7 +10,18 @@ SHARINATOR! - All Groups
 {% endblock %}
 
 {% block content %}
-<h3>My groups</h3><br />
+<h3>All groups</h3><br />
+{% if page_obj %}
+<div class="card">
+	<div class="card-body">
+		<a href="{% url 'addgroup' %}" class="btn btn-primary" >
+			<img src="{% static 'icons/plus-box.svg' %}" style="width: 32px; height: 32px;">
+			Add another
+		</a>
+	</div>
+</div>
+<br /><br />
+{% endif %}
 <ul class="list-group">
 {% for group in page_obj %}
 <li class="card">
@@ -19,18 +30,24 @@ SHARINATOR! - All Groups
 	{% endif %}
 	<div class="card-body">
 		<h5 class="card-title">{{ group.name }}</h5>
-		<p class="card-text mt-2">
-		{% autoescape off %}
-		{{ group.notes_cache }}
-		{% endautoescape %}
-		</p>
-		<a href="#" class="btn btn-primary">
-			<img src="{% static 'icons/edit-outline.svg' %}" style="width: 32px; height: 32px;"/>
-			Edit
-		</a>
-		<span class="badge badge-light">Number of Members: {{ group.members.count }}</span>
-		<span class="badge badge-light">Number of apllications: {{ group.applications.count }}</span>
-		<br />
+		<div class="row">
+			<div class="col">
+				<p class="card-text mt-2">
+				{% autoescape off %}
+				{{ group.notes_cache }}
+				{% endautoescape %}
+				</p>
+			</div>
+			<div class="col col-lg-2">
+				<a href="#" class="btn btn-primary">
+					<img src="{% static 'icons/edit-outline.svg' %}" style="width: 32px; height: 32px;"/>
+					Edit
+				</a>
+				<br />
+				<span class="badge badge-light">Number of Members: {{ group.members.count }}</span><br />
+				<span class="badge badge-light">Number of applications: {{ group.applications.count }}</span><br />
+			</div>
+		</div>
 		<small>Exists since: {{ group.created_at|naturalday }}</small>
 	</div>
 </li>
@@ -40,7 +57,7 @@ SHARINATOR! - All Groups
 		<div class="card-text">
 			<p>
 				There are no groups.
-				<a href="#" class="btn btn-primary">Create one</a>?
+				<a href="{% url 'addgroup' %}" class="btn btn-primary">Create one</a>?
 			</p>
 		</div>
 	</div>
