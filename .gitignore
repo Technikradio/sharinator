@@ -4,6 +4,7 @@ include/
 lib/
 share/
 man/
+env/
 
 # Personal TODO file
 TODO.md
